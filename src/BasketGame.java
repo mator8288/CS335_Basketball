@@ -76,10 +76,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		try {
 			gl.glGenTextures(texID.length, texID, 0);
 			texture_loader.loadTexture(texID[0], "textures/grass.jpg");
+			gl.glBlendFunc(GL2.GL_ONE_MINUS_SRC_COLOR, GL2.GL_ONE);
+			gl.glEnable(GL2.GL_BLEND);
 			texture_loader.loadTexture(texID[1], "textures/fence_wire.jpg");
+			gl.glDisable(GL2.GL_BLEND);
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
 			
-			gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE);
+			//gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
 	} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -227,11 +230,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawCourt(gl, 30f);
 		drawGround( gl, 150.0f );
 		//gl.glTranslatef(-15.0f, 10.0f, 0.0f);
+		
+		//gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		//gl.glEnable(GL2.GL_BLEND);
 		drawBox(gl, 30f);
+		//gl.glDisable(GL2.GL_BLEND);
 		gl.glPopMatrix();
-		
 		gl.glPopMatrix();
-		
 		drawHud(gl);
 		
 	}
@@ -257,7 +262,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	{
 		final float d = (size / 3.0f);
 		final float e = d - size;
-		
+		gl.glEnable(GL2.GL_BLEND);
 		// Front
 		gl.glBindTexture( GL2.GL_TEXTURE_2D, texID[1] );
 		gl.glBegin( GL2.GL_QUADS );
@@ -367,6 +372,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		gl.glEnd();
 		*/
+		
+		gl.glDisable(GL2.GL_BLEND);
 	}
 	
 	void drawGround( GL2 gl, float size ) {
