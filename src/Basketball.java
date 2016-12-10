@@ -2,15 +2,16 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 public class Basketball {
-	private float x_pos;
-	private float y_pos;
-	private float z_pos;
+	private float x_pos = 8.1f;
+	private float y_pos = 0.0f;
+	private float z_pos = 1.0f;
 	private final float radius = 0.4f;
 	
 	protected TextureLoader texture_loader = null;
 	private String skybox_name = null;
 	
 	public void draw(GL2 gl) {
+		float px, py, pz;
 		float nO = 40, nA = 40;
 	    float incO = (float) (2 * Math.PI) / nO;
 	    float incA = (float) Math.PI / nA;
