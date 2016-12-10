@@ -76,9 +76,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		try {
 			gl.glGenTextures(texID.length, texID, 0);
 			texture_loader.loadTexture(texID[0], "textures/grass.jpg");
-			gl.glBlendFunc(GL2.GL_ONE_MINUS_SRC_COLOR, GL2.GL_ONE);
+			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL2.GL_BLEND);
-			texture_loader.loadTexture(texID[1], "textures/fence_wire.jpg");
+			texture_loader.loadTexture(texID[1], "textures/fence_wire.png");
 			gl.glDisable(GL2.GL_BLEND);
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
 			
