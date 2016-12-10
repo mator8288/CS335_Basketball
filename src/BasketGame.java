@@ -76,7 +76,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		try {
 			gl.glGenTextures(texID.length, texID, 0);
 			texture_loader.loadTexture(texID[0], "textures/grass.jpg");
-			texture_loader.loadTexture(texID[1], "textures/asphalt.jpg");
+			texture_loader.loadTexture(texID[1], "textures/fence_wire.jpg");
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
 			
 			gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE);
@@ -266,10 +266,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex3f( d, -e, d);
 		
 		gl.glTexCoord2f( 0.0f, 0.0f );
-		gl.glVertex3f( d, -e, -d);
+		gl.glVertex3f( d, -e, -0.5f);
 		
 		gl.glTexCoord2f( 1.0f, 0.0f );
-		gl.glVertex3f( d, e, -d);
+		gl.glVertex3f( d, e, -0.5f);
 		
 		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex3f( d, e, d);
@@ -284,10 +284,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex3f( -d, e, d);
 		
 		gl.glTexCoord2f( 0.0f, 0.0f );
-		gl.glVertex3f( -d, e, -d );
+		gl.glVertex3f( -d, e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 0.0f );
-		gl.glVertex3f( -d, -e, -d );
+		gl.glVertex3f( -d, -e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex3f( -d, -e, d );
@@ -302,10 +302,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex3f( d, e, d );
 		
 		gl.glTexCoord2f( 0.0f, 0.0f );
-		gl.glVertex3f( d, e, -d );
+		gl.glVertex3f( d, e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 0.0f );
-		gl.glVertex3f( -d, e, -d );
+		gl.glVertex3f( -d, e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex3f( -d, e, d );
@@ -320,10 +320,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex3f( -d, -e, d );
 		
 		gl.glTexCoord2f( 0.0f, 0.0f );
-		gl.glVertex3f( -d, -e, -d );
+		gl.glVertex3f( -d, -e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 0.0f );
-		gl.glVertex3f( d, -e, -d );
+		gl.glVertex3f( d, -e, -0.5f );
 		
 		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex3f( d, -e, d );
@@ -349,12 +349,12 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glEnd();
 		*/
 		
-		// Down
+		/*
 		gl.glBindTexture( GL2.GL_TEXTURE_2D, texID[1] );
 		gl.glBegin( GL2.GL_QUADS );
 		
 		gl.glTexCoord2f( 0.0f, 1.0f );
-		gl.glVertex3f( d, -e, -d );
+		gl.glVertex3f( d, -e, 0.0f );
 		
 		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex3f( -d, -e, -d );
@@ -366,6 +366,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex3f( d, e, -d );
 		
 		gl.glEnd();
+		*/
 	}
 	
 	void drawGround( GL2 gl, float size ) {
