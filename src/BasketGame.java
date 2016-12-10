@@ -31,7 +31,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	//private SkyBox[] arrSkyboxes = new SkyBox[ arrSkyboxName.length ];
 	int texID[]  = new int[3];
 	
-	private float xPos = 0.0f;
+	private float xPos = 8.0f;
 	private float yPos = 0.0f;
 	private float zPos = 0.0f;
 	private float xLook = 1.0f;
@@ -238,11 +238,18 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	void drawHud(GL2 gl){
 				
-		TextRenderer text = new TextRenderer(new Font("Helvatica",Font.BOLD,40)); 
-        text.beginRendering(windowWidth, windowHeight);
-        text.setColor(1.0f,1.0f,1.0f,0.8f);
-        text.draw("+", windowWidth/2 , windowHeight/2);
-        text.endRendering();
+		TextRenderer hudElements = new TextRenderer(new Font("Helvatica",Font.BOLD,15)); 
+        hudElements.beginRendering(windowWidth, windowHeight);
+        
+        String v1 = Float.toString(yPos * -1);
+        String v2 = Float.toString(yLook * -1);
+        String v3 = Float.toString(zLook);
+        
+        hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
+        hudElements.draw("Player Position: " + v1, 120 , 85);
+        hudElements.draw("Player Horizontal Angle: " + v2, 120 , 70);
+        hudElements.draw("Player Vertical Angle: " + v3, 120 , 55);
+        hudElements.endRendering();
 	
 	}
 	
