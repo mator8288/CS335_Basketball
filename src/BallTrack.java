@@ -1,7 +1,9 @@
 import com.jogamp.opengl.*;
+import com.jogamp.opengl.util.gl2.GLUT;
 import java.util.*;
 
 public class BallTrack{
+	GLUT glut = new GLUT();
 	final int X = 0;
 	final int Y = 1;
 	final int Z = 2;
@@ -14,7 +16,8 @@ public class BallTrack{
 	float xStep, yStep, zStep;
 	Vector3f curPos, accel, speed;
 	private float diameter = 0.4f;
-	private Vector route;
+	private Vector route = new Vector();
+	String info = "";
 	
 	
 	public BallTrack(Vector3f curLoc, float strength, float angle, Vector3f cenLoc, float level) {
@@ -52,9 +55,35 @@ public class BallTrack{
 			// pole collision
 			//else if () {}
 			// side wall collision
-			else if () {}
+			//else if () {}
 			// front wall collision
 			// floor collision
+		}
+	}
+	
+	public Vector3f getTrackPos(int pos) {
+		return (Vector3f) route.get(pos);
+	}
+	
+	public int getSteps() {
+		return route.size();
+	}
+	
+	public boolean scored() {
+		return scored;
+	}
+	
+	public String getInfo(int pos) {
+		return info;
+	}
+	
+	public void showPath(GL2 gl) {
+		for (int i = 0; i < getSteps(); i++) {
+			gl.glPushMatrix();
+			gl.glTranslatef(((Vector3f) route.get(i)).getValue(X), ((Vector3f) route.get(i)).getValue(Y), ((Vector3f) route.get(i)).getValue(Z));
+			gl.glColor3f(1.0f, 1.0f, 1.0f);
+			glut.glutWireSphere(0.02, 10, 10);
+			gl.glPopMatrix();
 		}
 	}
 }

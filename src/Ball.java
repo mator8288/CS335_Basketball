@@ -13,7 +13,7 @@ public class Ball {
 	private boolean angleChange = false;
 	private boolean strengthChange = false;
 	private boolean show_trajectory = false;
-	private ballPath trajectory = null;
+	private BallTrack ballPath = null;
 	private int phase = 0;
 	private final int X = 0;
 	private final int Y = 1;
@@ -43,7 +43,7 @@ public class Ball {
 				thrown = false;
 			}
 			if (show_trajectory) {
-				ballPath.showPath();
+				ballPath.showPath(gl);
 			}
 			
 		} else {
@@ -111,8 +111,8 @@ public class Ball {
 		gl.glEnable(GL.GL_CULL_FACE);
 	}
 	
-	public void throw(Vector3f center) {
-		ballPath = NULL;
+	public void throwBall(Vector3f center) {
+		ballPath = null;
 		ballPath = new BallTrack(ballPos, strength, angle, center, level);
 		thrown = true;
 		throw_int = ballPath.getSteps();
@@ -122,7 +122,7 @@ public class Ball {
 	}
 	
 	public void replay() {
-		if (ballPath != NULL) {
+		if (ballPath != null) {
 			throw_int = ballPath.getSteps();
 			thrown = true;
 		}
@@ -145,7 +145,7 @@ public class Ball {
 	}
 	
 	public void setThrow(int progress) {
-		if (!((unsigned) (throw_int - progress) > ballPath.getSteps())) {
+		if (!((throw_int - progress) > ballPath.getSteps())) {
 			throw_int -= progress;
 		}
 		
