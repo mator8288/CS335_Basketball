@@ -42,8 +42,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private int mouse_x0 = 0;
 	private int mouse_y0 = 0;
 	
-	private String buttonType = "";
-	
 	private int mouse_mode = 0;
 	
 	private final int MOUSE_MODE_NONE = 0;
@@ -165,64 +163,56 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yPos += strafeVertical / normxy * pan;
 		}
 		
-		if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
+		if (keys[KeyEvent.VK_UP]){
 			
 			if (zLook < 1.0f){
-				zLook += 0.05f;
+				zLook += 0.01f;
 			}
 			else{
-				zLook -= 0.05f;
+				zLook -= 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_DOWN] || buttonType == "lookDown"){
+		if (keys[KeyEvent.VK_DOWN]){
 			
 			if (zLook > -1.0f){
-				zLook -= 0.05f;
+				zLook -= 0.01f;
 			}
 			else{
-				zLook += 0.05f;
+				zLook += 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_LEFT] || buttonType == "lookLeft"){
+		if (keys[KeyEvent.VK_LEFT]){
 			
 			if (yLook < 1.0f){
-				yLook += 0.05f;
+				yLook += 0.01f;
 			}
 			else{
-				yLook -= 0.05f;
+				yLook -= 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_RIGHT] || buttonType == "lookRight"){
+		if (keys[KeyEvent.VK_RIGHT]){
 	
 			if (yLook > -1.0f){
-				yLook -= 0.05f;
+				yLook -= 0.01f;
 			}
 			else{
-				yLook += 0.05f;
+				yLook += 0.01f;
 			}
-			buttonType = "";
 		}
 		
-		if (keys[KeyEvent.VK_COMMA] || buttonType == "moveLeft"){
+		if (keys[KeyEvent.VK_COMMA]){
 			
 			if (yPos < 9.5)
-				yPos += 0.1;
+				yPos += 0.05;
 			else
-				yPos -=0.1;
-			
-			buttonType = "";
+				yPos -=0.05;
 		}
-		if (keys[KeyEvent.VK_PERIOD] || buttonType == "moveRight"){
+		if (keys[KeyEvent.VK_PERIOD]){
 			
 			if (yPos > -9.5)
-				yPos -= 0.1;
+				yPos -= 0.05;
 			else
-				yPos +=0.1;
-			
-			buttonType = "";
+				yPos +=0.05;
 		}
 		
 		glu.gluLookAt( xPos, yPos, zPos,
@@ -247,10 +237,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		drawHud(gl);
 		
+		
+				
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 		gl.glLoadIdentity();
+		//gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 				
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glPushMatrix();
@@ -268,22 +261,21 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHudButtons(GL2 gl){
-		
 		//Angle Button 1
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(-0.75f, -0.6f);
-		gl.glVertex2f(-0.9f, -0.6f);
-		gl.glVertex2f(-0.9f, -0.75f);
-		gl.glVertex2f(-0.75f, -0.75f);
-		gl.glEnd();
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.75f, -0.6f);
+				gl.glVertex2f(-0.9f, -0.6f);
+				gl.glVertex2f(-0.9f, -0.75f);
+				gl.glVertex2f(-0.75f, -0.75f);
+				gl.glEnd();
 				
-		//Angle Button 2
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(-0.6f, -0.45f);
-		gl.glVertex2f(-0.75f, -0.45f);
-		gl.glVertex2f(-0.75f, -0.6f);
-		gl.glVertex2f(-0.6f, -0.6f);
-		gl.glEnd();
+				//Angle Button 2
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.6f, -0.45f);
+				gl.glVertex2f(-0.75f, -0.45f);
+				gl.glVertex2f(-0.75f, -0.6f);
+				gl.glVertex2f(-0.6f, -0.6f);
+				gl.glEnd();
 
 				//Angle Button 3
 				gl.glBegin(GL2.GL_QUADS);
@@ -564,53 +556,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		mouse_x0 = e.getX();
 		mouse_y0 = e.getY();
 		
-		System.out.println("X Click: " + mouse_x0);
-		System.out.println("Y Click: " + mouse_y0);
-		
-		if ( MouseEvent.BUTTON2 == e.getButton() ) {
+		if ( MouseEvent.BUTTON1 == e.getButton() ) {
 			mouse_mode = MOUSE_MODE_ROTATE;
 		} else {
 			mouse_mode = MOUSE_MODE_NONE;
 		}
-		
-		//Button Look 1 - Left
-		if(mouse_x0 < 75 && mouse_x0 > 30){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "lookLeft";
-			}
-		}
-		//Button Look 2 - Right
-		if(mouse_x0 < 170 && mouse_x0 > 125){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "lookRight";
-			}
-		}
-		//Button Look 3 - Up
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 350 && mouse_y0 > 320){
-				buttonType = "lookUp";
-			}
-		}
-		//Button Look 4 - Down
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 420 && mouse_y0 > 385){
-				buttonType = "lookDown";
-			}
-		}
-		
-		//Button Move 1 - Left
-		if(mouse_x0 < 495 && mouse_x0 > 455){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "moveLeft";
-			}
-		}
-		//Button Move 2 - Right
-		if(mouse_x0 < 590 && mouse_x0 > 545){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "moveRight";
-			}
-		}
-
 	}
 
 	@Override
