@@ -46,6 +46,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	private String buttonType = "";
 	
+	private float init_Velocity = 0.0f;
+	private boolean progDirection = true;
+	private boolean shootBar = false;
+	
 	private int mouse_mode = 0;
 	
 	private final int MOUSE_MODE_NONE = 0;
@@ -231,6 +235,13 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 			buttonType = "";
 		}
 		
+		if(keys[KeyEvent.VK_SPACE]){
+			if(shootBar)
+				shootBar = false;
+			else
+				shootBar = true;
+		}
+		
 		glu.gluLookAt( xPos, yPos, zPos,
 				xPos + xLook, yPos + yLook, zPos + zLook,
 				0.0f, 0.0f, 1.0f );
@@ -404,6 +415,52 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(0.45f, -0.75f);
 		gl.glEnd();
+		
+		//Draw Progress Bar
+		gl.glBindTexture( GL2.GL_TEXTURE_2D, 0 );
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(0.3f, -0.6f);
+		gl.glVertex2f(-0.3f, -0.6f);
+		gl.glVertex2f(-0.3f, -0.75f);
+		gl.glVertex2f(0.3f, -0.75f);
+		gl.glEnd();
+		
+		gl.glColor3f(0.0f, 1.0f, 0.0f);
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(0.15f, -0.6f);
+		gl.glVertex2f(0.1f, -0.6f);
+		gl.glVertex2f(0.1f, -0.75f);
+		gl.glVertex2f(0.15f, -0.75f);
+		gl.glEnd();
+		
+		gl.glTranslatef(init_Velocity, 0.0f, 0.0f);
+		gl.glColor3f(0.0f, 0.0f, 1.0f);
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(-0.25f, -0.65f);
+		gl.glVertex2f(-0.3f, -0.65f);
+		gl.glVertex2f(-0.3f, -0.7f);
+		gl.glVertex2f(-0.25f, -0.7f);
+		gl.glEnd();
+		
+		if (shootBar)
+		{
+			if (init_Velocity < 0.55 && progDirection){
+				init_Velocity += 0.005;
+			}
+			else
+			{
+				progDirection = false;
+			}
+			
+			if (init_Velocity > 0 && !progDirection){
+				init_Velocity -= 0.005;
+			}
+			else
+			{
+				progDirection = true;
+			}
+		}
+	
 	}
 	
 	void drawHud(GL2 gl){
@@ -414,11 +471,13 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
         String v1 = Float.toString(yPos * -1);
         String v2 = Float.toString(yLook * -1);
         String v3 = Float.toString(zLook);
+        String v4 = Float.toString(init_Velocity);
         
         hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
-        hudElements.draw("Player Position: " + v1, 50 , 400);
-        hudElements.draw("Player Horizontal Angle: " + v2, 50 , 385);
-        hudElements.draw("Player Vertical Angle: " + v3, 50 , 370);
+        hudElements.draw("Player Position: " + v1, 15 , 400);
+        hudElements.draw("Player Horizontal Angle: " + v2, 15 , 385);
+        hudElements.draw("Player Vertical Angle: " + v3, 15 , 370);
+        hudElements.draw("Throw Strength: " + v4, 450, 400);
         hudElements.endRendering();
 	
 	}
