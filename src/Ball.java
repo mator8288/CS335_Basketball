@@ -7,7 +7,6 @@ public class Ball {
 	private boolean thrown = false;
 	private int throw_int = 0;
 	private boolean scored = false;
-	private float level;
 	private float angle;
 	private float strength;
 	private boolean angleChange = false;
@@ -19,9 +18,8 @@ public class Ball {
 	private final int Y = 1;
 	private final int Z = 2;
 	
-	public Ball(Vector3f pos, float lev) {
+	public Ball(Vector3f pos) {
 		ballPos = pos;
-		level = lev;
 	}
 	
 	public void reset() {
@@ -87,6 +85,7 @@ public class Ball {
 				}
 			}
 			
+			
 			float xDisplay = (pos.getValue(X) - look.getValue(X));
 			float yDisplay = (pos.getValue(Y) - look.getValue(Y));
 			float distance = (float) Math.sqrt(xDisplay * xDisplay + yDisplay * yDisplay);
@@ -97,10 +96,11 @@ public class Ball {
 			gl.glRotatef(180 + angleSin, 1, 0, 0);
 			gl.glColor3f(0.0f, 0.0f, 1.0f);
 			glut.glutSolidCone(0.25, strength / 10, 10, 30);
+			
 		}
 		gl.glPopMatrix();
 		
-		gl.glDisable(GL.GL_CULL_FACE);
+		/*gl.glDisable(GL.GL_CULL_FACE);
 		gl.glPushMatrix();
 		gl.glTranslatef(ballPos.getValue(X), ballPos.getValue(Y), -1.9f);
 		gl.glRotatef(90, 0, 0, 1);
@@ -109,11 +109,12 @@ public class Ball {
 		glut.glutSolidCone(0.3, 0.1, 10, 10);
 		gl.glPopMatrix();
 		gl.glEnable(GL.GL_CULL_FACE);
+		*/
 	}
 	
 	public void throwBall(Vector3f center) {
 		ballPath = null;
-		ballPath = new BallTrack(ballPos, strength, angle, center, level);
+		ballPath = new BallTrack(ballPos, strength, angle, center);
 		thrown = true;
 		throw_int = ballPath.getSteps();
 		if (ballPath.scored()) {

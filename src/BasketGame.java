@@ -42,6 +42,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	Vector3f pos = new Vector3f(xPos, yPos, zPos);
 	Vector3f look = new Vector3f(xLook, yLook, zLook);
 	
+	int score = 0;
+	int nThrows = 0;
+	
+	Ball basketball = new Ball(ballPos);
+	Ball lastBall = new Ball(ballPos);
+	boolean last_throw_score = false;
+	
 	GLUT glut = new GLUT();
 	
 	private int mouse_x0 = 0;
@@ -178,7 +185,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yPos += strafeVertical / normxy * pan;
 		}
 		
-if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
+		if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 			
 			if (zLook < 1.0f){
 				zLook += 0.05f;
@@ -295,6 +302,7 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 	    gl.glTranslatef(0.0f, -19.0f, 0.0f);
 	    glut.glutSolidCylinder(0.1, 8, 10, 10);
 	    gl.glPopMatrix();
+	    basketball.drawBall(ballPos, look, gl);
 		
 	    gl.glEnable(GL.GL_TEXTURE_2D);
 		//Start of 2D heads-up display
@@ -302,7 +310,6 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 		gl.glPopMatrix();
 		
 		drawHud(gl);
-		
 		
 				
 		gl.glMatrixMode(GL2.GL_PROJECTION);

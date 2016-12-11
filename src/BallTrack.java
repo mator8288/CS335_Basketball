@@ -20,7 +20,7 @@ public class BallTrack{
 	String info = "";
 	
 	
-	public BallTrack(Vector3f curLoc, float strength, float angle, Vector3f cenLoc, float level) {
+	public BallTrack(Vector3f curLoc, float strength, float angle, Vector3f cenLoc) {
 		step = strength / 900;
 		xChange = cenLoc.getValue(X) - curLoc.getValue(X);
 		yChange = cenLoc.getValue(Y) - curLoc.getValue(Y);
@@ -34,7 +34,6 @@ public class BallTrack{
 		
 		while (route.size() < 350) {
 			route.add(new Vector3f(curPos));
-			String info;
 			info = "";
 			speed.add(accel);
 			curPos.add(speed);
@@ -58,7 +57,6 @@ public class BallTrack{
 			//else if () {}
 			// front wall collision
 			// floor collision
-			
 		}
 	}
 	
