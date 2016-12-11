@@ -5,8 +5,8 @@ public class Player{
 	GLUT glut = new GLUT();
 	Vector3f centerVec = new Vector3f(8.0f, 0.0f, 2.0f);
 	Vector3f eyeVec = new Vector3f(0.0f, 0.0f, 10.0f);
-	Vector3f ballPos = new Vector3f(0.0f, -9.0f, 2.0f);
-	Vector3f lastPos = new Vector3f(0.0f, -9.0f, 2.0f);
+	Vector3f ballPos = new Vector3f(0.0f, -8.5f, 2.0f);
+	Vector3f lastPos = new Vector3f(0.0f, -8.5f, 2.0f);
 	boolean last_throw_score = false;
 	Ball ball = new Ball(ballPos);
 	int score = 0;
@@ -40,6 +40,30 @@ public class Player{
 		}
 	}
 	
+	public void moveLeftRight(int direction) {
+		float dist = calcDistance();
+		float x = centerVec.getValue(0) - eyeVec.getValue(0);
+		float z = centerVec.getValue(2) - eyeVec.getValue(2);
+		int zDirection = 1;
+		if (centerVec.getValue(2) < 5) {
+			zDirection = 1;
+		} else {
+			zDirection = -1;
+		}
+		
+		if (canMoveY(direction)) {}
+	}
+	
+	public boolean canMoveX(int direction) {
+		if (direction == 1) {
+			if (eyeVec.getValue(0) < )
+		}
+	}
+	
+	public void changeLook() {
+		
+	}
+	
 	public void throwBall() {
 		nThrows++;
 		lastPos.setVector(ball.getPos());
@@ -69,11 +93,21 @@ public class Player{
 	}
 	
 	public float calcDistance() {
-		float x = lookatCenter().getValue(0) - lookatEye().getValue(0);
-		float z = 
+		float x = centerVec.getValue(0) - eyeVec.getValue(0);
+		float z = centerVec.getValue(2) - eyeVec.getValue(2);
+		float dist = (float) Math.sqrt(x*x + z*z);
+		return dist;
+	}
+	
+	public void setPos(Vector3f newPosition) {
+		eyeVec = newPosition;
 	}
 	
 	public void incScore() {
 		score++;
+	}
+	
+	public int setScore() {
+		return score;
 	}
 }

@@ -56,7 +56,7 @@ public class Ball {
 		}
 		gl.glPushMatrix();
 		gl.glColor3f(0.98f, 0.51f, 0.12f);
-		gl.glTranslatef(ballPos.getValue(X), ballPos.getValue(Y), ballPos.getValue(Z));
+		gl.glTranslatef(pos.getValue(X), pos.getValue(Y), pos.getValue(Z));
 		gl.glDisable(GL.GL_TEXTURE_2D);
 		glut.glutSolidSphere(0.4, 50, 50);
 		gl.glEnable(GL.GL_TEXTURE_2D);

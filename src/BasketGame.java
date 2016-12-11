@@ -42,12 +42,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	Vector3f pos = new Vector3f(xPos, yPos, zPos);
 	Vector3f look = new Vector3f(xLook, yLook, zLook);
+	Vector3f ballPos = new Vector3f(0.0f, -9.0f, 2.0f);
 	
-	int score = 0;
-	int nThrows = 0;
-	
-	//Ball basketball = new Ball(ballPos);
-	//Ball lastBall = new Ball(ballPos);
+	Ball basketball = new Ball(ballPos);
+	Ball lastBall = new Ball(ballPos);
 	boolean last_throw_score = false;
 	
 	GLUT glut = new GLUT();
@@ -93,7 +91,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		/*for ( int i = 0; i < skybox_max_textures; ++i )
 			arrSkyboxes[ i ] = new SkyBox( texture_loader, arrSkyboxName[ i ] );
 		*/
-		mySkybox = new SkyBox( texture_loader, SkyboxName);
+		mySkybox = new SkyBox( texture_loader, SkyboxName );
 		
 		try {
 			gl.glGenTextures(texID.length, texID, 0);
@@ -145,7 +143,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		gl.glMatrixMode( GL2.GL_MODELVIEW );
 		gl.glPushMatrix();
-		
 		final float pan = 0.25f;
 		
 		// Update the camera state.
@@ -272,6 +269,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawCourt(gl, 30f);
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
+		
+		basketball.drawBall(new Vector3f(0.0f, -9.0f, 0.0f), look, gl);
 		
 		//Backboard
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texID[3]);
@@ -458,16 +457,16 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		if (shootBar)
 		{
-			if (init_Velocity < 0.55 && progDirection){
-				init_Velocity += 0.01;
+			if (init_Velocity < 1.0f && progDirection){
+				init_Velocity += 0.02f;
 			}
 			else
 			{
 				progDirection = false;
 			}
 			
-			if (init_Velocity > 0.02 && !progDirection){
-				init_Velocity -= 0.01;
+			if (init_Velocity > 0.01 && !progDirection){
+				init_Velocity -= 0.02;
 			}
 			else
 			{
@@ -487,7 +486,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
         String v1 = f.format(yPos * -1);
         String v2 = f.format(yLook * -1);
         String v3 = f.format(zLook);
-        String v4 = f.format((init_Velocity/0.56f) * 100.0f);
+        String v4 = f.format((init_Velocity) * 100.0f);
         
         hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
         hudElements.draw("Player Position: " + v1, 15 , 400);
@@ -671,7 +670,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 
 	@Override
 	public void keyPressed( KeyEvent e ) {
-		//keys[ e.getKeyCode() ] = true;
+		keys[ e.getKeyCode() ] = true;
 	}
 
 	@Override
