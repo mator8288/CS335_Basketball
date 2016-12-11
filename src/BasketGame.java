@@ -251,12 +251,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		gl.glDisable(GL2.GL_DEPTH_TEST);
 		
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(0.0f, 0.0f);
-		gl.glVertex2f(50.0f, 0.0f);
-		gl.glVertex2f(50.0f, 50.0f);
-		gl.glVertex2f(0.0f, 50.0f);
-		gl.glEnd();
+		drawHudButtons(gl);
 		
 		gl.glEnable(GL2.GL_DEPTH_TEST);		
 		
@@ -265,6 +260,55 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glPopMatrix();
 	}
 	
+	void drawHudButtons(GL2 gl){
+		//Angle Button 1
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.75f, -0.6f);
+				gl.glVertex2f(-0.9f, -0.6f);
+				gl.glVertex2f(-0.9f, -0.75f);
+				gl.glVertex2f(-0.75f, -0.75f);
+				gl.glEnd();
+				
+				//Angle Button 2
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.6f, -0.45f);
+				gl.glVertex2f(-0.75f, -0.45f);
+				gl.glVertex2f(-0.75f, -0.6f);
+				gl.glVertex2f(-0.6f, -0.6f);
+				gl.glEnd();
+
+				//Angle Button 3
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.45f, -0.6f);
+				gl.glVertex2f(-0.6f, -0.6f);
+				gl.glVertex2f(-0.6f, -0.75f);
+				gl.glVertex2f(-0.45f, -0.75f);
+				gl.glEnd();
+				
+				//Angle Button 4
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.6f, -0.75f);
+				gl.glVertex2f(-0.75f, -0.75f);
+				gl.glVertex2f(-0.75f, -0.9f);
+				gl.glVertex2f(-0.6f, -0.9f);
+				gl.glEnd();
+				
+				//Position Button 1
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(0.75f, -0.6f);
+				gl.glVertex2f(0.9f, -0.6f);
+				gl.glVertex2f(0.9f, -0.75f);
+				gl.glVertex2f(0.75f, -0.75f);
+				gl.glEnd();
+				
+				//Position Button 2
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(0.45f, -0.6f);
+				gl.glVertex2f(0.6f, -0.6f);
+				gl.glVertex2f(0.6f, -0.75f);
+				gl.glVertex2f(0.45f, -0.75f);
+				gl.glEnd();
+	}
 	void drawHud(GL2 gl){
 				
 		TextRenderer hudElements = new TextRenderer(new Font("Helvatica",Font.BOLD,15)); 
