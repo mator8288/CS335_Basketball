@@ -35,7 +35,21 @@ public class BallTrack{
 			info = "";
 			speed.add(accel);
 			curPos.add(speed);
-			if (curPos.getValue(Y) < 1.8 && curPos.getValue(Y) > 1.3)
+			
+			// collision detection
+			// backboard collision
+			if ((curPos.getValue(Y) <= -18.3 && curPos.getValue(Y) >= -18.7) &&
+					(curPos.getValue(X) >= -3.2 && curPos.getValue(X) <= 3.2) &&
+					(curPos.getValue(Z) >= 6.3 && curPos.getValue(Z) <= 9.7)) {
+				speed.changeDirection(Y);
+				if (curPos.getValue(Y) > -18.3)
+					curPos.setParameter(Z, -18.7f);
+				else 
+					curPos.setParameter(Z, -18.3f);
+				speed.setParameter(Y, 0.9f * speed.getValue(Y));
+				info = "Backboard hit!";
+			}
+			else if ()
 		}
 	}
 }
