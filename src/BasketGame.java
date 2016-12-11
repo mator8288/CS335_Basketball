@@ -49,6 +49,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private final int MOUSE_MODE_NONE = 0;
 	private final int MOUSE_MODE_ROTATE = 1;
 	
+	private float throwStrength = 0.0f;
+	
 	private boolean[] keys = new boolean[256];
 	GLUquadric quadric;
 	private GLU glu = new GLU();
@@ -226,6 +228,12 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			buttonType = "";
 		}
 		
+		if (keys[KeyEvent.VK_SPACE])
+		{
+			
+			
+		}
+		
 		glu.gluLookAt( xPos, yPos, zPos,
 				xPos + xLook, yPos + yLook, zPos + zLook,
 				0.0f, 0.0f, 1.0f );
@@ -360,6 +368,20 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(0.45f, -0.75f);
 		gl.glEnd();
+		
+		//Draw Progress Bar
+		gl.glColorMaterial(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE);
+		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glVertex2f(0.3f, -0.6f);
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glVertex2f(-0.3f, -0.6f);
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glVertex2f(-0.3f, -0.75f);
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glVertex2f(0.3f, -0.75f);
+		gl.glEnd();
 	}
 	void drawHud(GL2 gl){
 				
@@ -369,11 +391,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
         String v1 = Float.toString(yPos * -1);
         String v2 = Float.toString(yLook * -1);
         String v3 = Float.toString(zLook);
+        String v4 = Float.toString(throwStrength);
         
         hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
         hudElements.draw("Player Position: " + v1, 50 , 400);
         hudElements.draw("Player Horizontal Angle: " + v2, 50 , 385);
         hudElements.draw("Player Vertical Angle: " + v3, 50 , 370);
+        hudElements.draw("Throw Strength: " + v4, 400, 400);
         hudElements.endRendering();
 	
 	}
