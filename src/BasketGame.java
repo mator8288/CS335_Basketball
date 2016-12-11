@@ -30,7 +30,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	private final int skybox_max_textures = 1;
 	//private SkyBox[] arrSkyboxes = new SkyBox[ arrSkyboxName.length ];
-	int texID[]  = new int[3];
+	int texID[]  = new int[10];
 	
 	private float xPos = 8.0f;
 	private float yPos = 0.0f;
@@ -84,6 +84,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			texture_loader.loadTexture(texID[1], "textures/fence_wire.png");
 			gl.glDisable(GL2.GL_BLEND);
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
+			texture_loader.loadTexture(texID[3], "textures/asphaltArrow.jpg");
 			
 			//gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
 		} catch (IOException e1) {
@@ -268,54 +269,97 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHudButtons(GL2 gl){
+		gl.glBindTexture( GL2.GL_TEXTURE_2D, texID[3] );
 		
-		//Angle Button 1
+		//Angle Button 1 - Left
 		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.75f, -0.6f);
+		
+		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.9f, -0.6f);
+		
+		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.9f, -0.75f);
+		
+		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.75f);
 		gl.glEnd();
 				
-		//Angle Button 2
+		//Angle Button 2 - Up
 		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.6f, -0.45f);
+		
+		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.45f);
+		
+		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.6f);
+		
+		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.6f, -0.6f);
 		gl.glEnd();
 
-				//Angle Button 3
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(-0.45f, -0.6f);
-				gl.glVertex2f(-0.6f, -0.6f);
-				gl.glVertex2f(-0.6f, -0.75f);
-				gl.glVertex2f(-0.45f, -0.75f);
-				gl.glEnd();
+		//Angle Button 3
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex2f(-0.45f, -0.6f);
+		
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex2f(-0.6f, -0.6f);
+		
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex2f(-0.6f, -0.75f);
+		
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex2f(-0.45f, -0.75f);
+		gl.glEnd();
+		
+		//Angle Button 4
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex2f(-0.6f, -0.75f);
+		
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex2f(-0.75f, -0.75f);
+		
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex2f(-0.75f, -0.9f);
+		
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex2f(-0.6f, -0.9f);
+		gl.glEnd();
+		
+		//Position Button 1
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex2f(0.75f, -0.6f);
+		
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex2f(0.9f, -0.6f);
+		
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex2f(0.9f, -0.75f);
+		
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex2f(0.75f, -0.75f);
+		gl.glEnd();
 				
-				//Angle Button 4
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(-0.6f, -0.75f);
-				gl.glVertex2f(-0.75f, -0.75f);
-				gl.glVertex2f(-0.75f, -0.9f);
-				gl.glVertex2f(-0.6f, -0.9f);
-				gl.glEnd();
+		//Position Button 2
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex2f(0.45f, -0.6f);
 				
-				//Position Button 1
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(0.75f, -0.6f);
-				gl.glVertex2f(0.9f, -0.6f);
-				gl.glVertex2f(0.9f, -0.75f);
-				gl.glVertex2f(0.75f, -0.75f);
-				gl.glEnd();
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex2f(0.6f, -0.6f);
 				
-				//Position Button 2
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(0.45f, -0.6f);
-				gl.glVertex2f(0.6f, -0.6f);
-				gl.glVertex2f(0.6f, -0.75f);
-				gl.glVertex2f(0.45f, -0.75f);
-				gl.glEnd();
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex2f(0.6f, -0.75f);
+				
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex2f(0.45f, -0.75f);
+		gl.glEnd();
 	}
 	void drawHud(GL2 gl){
 				
