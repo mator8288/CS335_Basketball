@@ -44,9 +44,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	Vector3f look = new Vector3f(xLook, yLook, zLook);
 	Vector3f ballPos = new Vector3f(0.0f, -9.0f, 2.0f);
 	
-	Ball basketball = new Ball(ballPos);
-	Ball lastBall = new Ball(ballPos);
+	Ball basketball = new Ball(new Vector3f(xPos + 1.0f, yPos, zPos));
+	Ball lastBall = new Ball(pos);
 	boolean last_throw_score = false;
+	
+	int phase = 0;
 	
 	GLUT glut = new GLUT();
 	
@@ -245,8 +247,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		}
 		
 		if(keys[KeyEvent.VK_SPACE] || buttonType == "strengthBar"){
-			if(shootBar)
+			if(shootBar) {
 				shootBar = false;
+				basketball.throwBall(ballPos, init_Velocity, 45f, pos);
+				phase = 1;
+			}
 			else
 				shootBar = true;
 						
@@ -270,7 +275,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
 		
-		basketball.drawBall(new Vector3f(0.0f, -9.0f, 0.0f), look, gl);
+		basketball.drawBall(ballPos, look, gl);
 		
 		//Backboard
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texID[3]);
@@ -446,7 +451,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex2f(0.15f, -0.75f);
 		gl.glEnd();
 		
-		gl.glTranslatef(init_Velocity, 0.0f, 0.0f);
+		gl.glTranslatef(0.55f * init_Velocity, 0.0f, 0.0f);
 		gl.glColor3f(0.0f, 0.0f, 1.0f);
 		gl.glBegin(GL2.GL_QUADS);
 		gl.glVertex2f(-0.25f, -0.65f);

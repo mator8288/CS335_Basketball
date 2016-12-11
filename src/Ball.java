@@ -11,7 +11,7 @@ public class Ball {
 	private float strength;
 	private boolean angleChange = false;
 	private boolean strengthChange = false;
-	private boolean show_trajectory = false;
+	private boolean show_trajectory = true;
 	private BallTrack ballPath = null;
 	private int phase = 0;
 	private final int X = 0;
@@ -45,6 +45,7 @@ public class Ball {
 			}
 			
 		} else {
+			//ballPos = pos;
 			float changeX = look.getValue(X) - pos.getValue(X);
 			float changeY = look.getValue(Y) - pos.getValue(Y);
 			float dist = (float) Math.sqrt(changeX * changeX + changeY * changeY);
@@ -112,9 +113,9 @@ public class Ball {
 		*/
 	}
 	
-	public void throwBall(Vector3f center) {
+	public void throwBall(Vector3f pos, float str, float ang, Vector3f cen) {
 		ballPath = null;
-		ballPath = new BallTrack(ballPos, strength, angle, center);
+		ballPath = new BallTrack(pos, str, ang, cen);
 		thrown = true;
 		throw_int = ballPath.getSteps();
 		if (ballPath.scored()) {
