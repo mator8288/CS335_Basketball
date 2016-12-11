@@ -448,15 +448,15 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 		if (shootBar)
 		{
 			if (init_Velocity < 0.55 && progDirection){
-				init_Velocity += 0.005;
+				init_Velocity += 0.01;
 			}
 			else
 			{
 				progDirection = false;
 			}
 			
-			if (init_Velocity > 0 && !progDirection){
-				init_Velocity -= 0.005;
+			if (init_Velocity > 0.02 && !progDirection){
+				init_Velocity -= 0.01;
 			}
 			else
 			{
@@ -658,12 +658,15 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 
 	@Override
 	public void keyPressed( KeyEvent e ) {
-		keys[ e.getKeyCode() ] = true;
+		//keys[ e.getKeyCode() ] = true;
 	}
 
 	@Override
 	public void keyReleased( KeyEvent e ) {
-		keys[ e.getKeyCode() ] = false;
+		if(keys[ e.getKeyCode() ])
+			keys[ e.getKeyCode() ] = false;
+		else
+			keys[ e.getKeyCode() ] = true;
 	}
 
 	@Override
