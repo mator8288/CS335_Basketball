@@ -30,25 +30,25 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	private final int skybox_max_textures = 1;
 	//private SkyBox[] arrSkyboxes = new SkyBox[ arrSkyboxName.length ];
-	int texID[]  = new int[10];
+	int texID[]  = new int[5];
 	
 	private float xPos = 8.0f;
 	private float yPos = 0.0f;
-	private float zPos = 0.0f;
+	private float zPos = 2.0f;
 	private float xLook = 1.0f;
 	private float yLook = 0.0f;
 	private float zLook = 0.0f;
 	
+	GLUT glut = new GLUT();
+	
 	private int mouse_x0 = 0;
 	private int mouse_y0 = 0;
-	
-	private String buttonType = "";
 	
 	private int mouse_mode = 0;
 	
 	private final int MOUSE_MODE_NONE = 0;
 	private final int MOUSE_MODE_ROTATE = 1;
-	
+
 	private boolean[] keys = new boolean[256];
 	GLUquadric quadric;
 	private GLU glu = new GLU();
@@ -76,6 +76,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			arrSkyboxes[ i ] = new SkyBox( texture_loader, arrSkyboxName[ i ] );
 		*/
 		mySkybox = new SkyBox( texture_loader, SkyboxName);
+		
 		try {
 			gl.glGenTextures(texID.length, texID, 0);
 			texture_loader.loadTexture(texID[0], "textures/grass.jpg");
@@ -84,7 +85,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			texture_loader.loadTexture(texID[1], "textures/fence_wire.png");
 			gl.glDisable(GL2.GL_BLEND);
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
-			texture_loader.loadTexture(texID[3], "textures/asphaltArrow.jpg");
+			texture_loader.loadTexture(texID[3], "textures/bboard.jpg");
+			texture_loader.loadTexture(texID[4], "textures/pole.jpg");
 			
 			//gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
 		} catch (IOException e1) {
@@ -166,64 +168,56 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yPos += strafeVertical / normxy * pan;
 		}
 		
-		if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
+		if (keys[KeyEvent.VK_UP]){
 			
 			if (zLook < 1.0f){
-				zLook += 0.05f;
+				zLook += 0.01f;
 			}
 			else{
-				zLook -= 0.05f;
+				zLook -= 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_DOWN] || buttonType == "lookDown"){
+		if (keys[KeyEvent.VK_DOWN]){
 			
 			if (zLook > -1.0f){
-				zLook -= 0.05f;
+				zLook -= 0.01f;
 			}
 			else{
-				zLook += 0.05f;
+				zLook += 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_LEFT] || buttonType == "lookLeft"){
+		if (keys[KeyEvent.VK_LEFT]){
 			
 			if (yLook < 1.0f){
-				yLook += 0.05f;
+				yLook += 0.01f;
 			}
 			else{
-				yLook -= 0.05f;
+				yLook -= 0.01f;
 			}
-			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_RIGHT] || buttonType == "lookRight"){
+		if (keys[KeyEvent.VK_RIGHT]){
 	
 			if (yLook > -1.0f){
-				yLook -= 0.05f;
+				yLook -= 0.01f;
 			}
 			else{
-				yLook += 0.05f;
+				yLook += 0.01f;
 			}
-			buttonType = "";
 		}
 		
-		if (keys[KeyEvent.VK_COMMA] || buttonType == "moveLeft"){
+		if (keys[KeyEvent.VK_COMMA]){
 			
 			if (yPos < 9.5)
-				yPos += 0.1;
+				yPos += 0.05;
 			else
-				yPos -=0.1;
-			
-			buttonType = "";
+				yPos -=0.05;
 		}
-		if (keys[KeyEvent.VK_PERIOD] || buttonType == "moveRight"){
+		if (keys[KeyEvent.VK_PERIOD]){
 			
 			if (yPos > -9.5)
-				yPos -= 0.1;
+				yPos -= 0.05;
 			else
-				yPos +=0.1;
-			
-			buttonType = "";
+				yPos +=0.05;
 		}
 		
 		glu.gluLookAt( xPos, yPos, zPos,
@@ -243,15 +237,54 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
 		
+		//Backboard
+		gl.glBindTexture(GL.GL_TEXTURE_2D, texID[3]);
+		gl.glBegin(GL2.GL_POLYGON);
+		gl.glTexCoord2f(0.0f, 0.0f);
+		gl.glVertex3f(-3.0f, -18.5f, 6.5f);
+		gl.glTexCoord2f(1.0f, 0.0f);
+		gl.glVertex3f(3.0f, -18.5f, 6.5f);
+		gl.glTexCoord2f(1.0f, 1.0f);
+		gl.glVertex3f(3.0f, -18.5f, 9.5f);
+		gl.glTexCoord2f(0.0f, 1.0f);
+		gl.glVertex3f(-3.0f, -18.5f, 9.5f);
+		gl.glEnd();
+		gl.glDisable(GL.GL_TEXTURE_2D);
+		
+		//Rim
+		gl.glColor3f(1.0f, 0.3f, 0.03f);
+		gl.glPushMatrix();
+		gl.glTranslatef(0.0f, -17.5f, 7.0f);
+		//gl.glRotatef(-5, 1, 0, 0);
+		glut.glutSolidTorus(0.045f, 1.0f, 15, 15);
+		gl.glPopMatrix();
+		
+
+		//Pole
+		gl.glColor3f(0.5f, 0.5f, 0.5f);
+	    gl.glPushMatrix();
+	    //gl.glBindTexture(GL.GL_TEXTURE_2D, texID[4]);
+	    //gl.glColor3f(0.5f, 0.5f, 0.5f);
+	    //gl.glRotatef(90, 0, 1, 0);  
+	    //gl.glRotatef(90, 1, 0, 0);
+	    gl.glTranslatef(0.0f, -19.0f, 0.0f);
+	    glut.glutSolidCylinder(0.1, 8, 10, 10);
+	    gl.glPopMatrix();
+		
+	    gl.glEnable(GL.GL_TEXTURE_2D);
+		//Start of 2D heads-up display
 		gl.glPopMatrix();
 		gl.glPopMatrix();
 		
 		drawHud(gl);
 		
+		
+				
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 		gl.glLoadIdentity();
+		//gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 				
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glPushMatrix();
@@ -269,98 +302,55 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHudButtons(GL2 gl){
-		gl.glBindTexture( GL2.GL_TEXTURE_2D, texID[3] );
-		
-		//Angle Button 1 - Left
+		//Angle Button 1
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.75f, -0.6f);
-		
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.9f, -0.6f);
-		
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.9f, -0.75f);
-		
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.75f);
 		gl.glEnd();
-				
-		//Angle Button 2 - Up
+		
+		//Angle Button 2
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.6f, -0.45f);
-		
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.45f);
-		
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.75f, -0.6f);
-		
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.6f, -0.6f);
 		gl.glEnd();
 
 		//Angle Button 3
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.45f, -0.6f);
-		
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.6f, -0.6f);
-		
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.6f, -0.75f);
-		
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.45f, -0.75f);
 		gl.glEnd();
 		
 		//Angle Button 4
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(-0.6f, -0.75f);
-		
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(-0.75f, -0.75f);
-		
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(-0.75f, -0.9f);
-		
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(-0.6f, -0.9f);
 		gl.glEnd();
 		
 		//Position Button 1
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(0.75f, -0.6f);
-		
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(0.9f, -0.6f);
-		
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(0.9f, -0.75f);
-		
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(0.75f, -0.75f);
 		gl.glEnd();
-				
+		
 		//Position Button 2
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2f( 1.0f, 1.0f );
 		gl.glVertex2f(0.45f, -0.6f);
-				
-		gl.glTexCoord2f( 0.0f, 1.0f );
 		gl.glVertex2f(0.6f, -0.6f);
-				
-		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex2f(0.6f, -0.75f);
-				
-		gl.glTexCoord2f( 1.0f, 0.0f );
 		gl.glVertex2f(0.45f, -0.75f);
 		gl.glEnd();
 	}
+	
 	void drawHud(GL2 gl){
 				
 		TextRenderer hudElements = new TextRenderer(new Font("Helvatica",Font.BOLD,15)); 
@@ -608,53 +598,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		mouse_x0 = e.getX();
 		mouse_y0 = e.getY();
 		
-		System.out.println("X Click: " + mouse_x0);
-		System.out.println("Y Click: " + mouse_y0);
-		
-		if ( MouseEvent.BUTTON2 == e.getButton() ) {
+		if ( MouseEvent.BUTTON1 == e.getButton() ) {
 			mouse_mode = MOUSE_MODE_ROTATE;
 		} else {
 			mouse_mode = MOUSE_MODE_NONE;
 		}
-		
-		//Button Look 1 - Left
-		if(mouse_x0 < 75 && mouse_x0 > 30){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "lookLeft";
-			}
-		}
-		//Button Look 2 - Right
-		if(mouse_x0 < 170 && mouse_x0 > 125){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "lookRight";
-			}
-		}
-		//Button Look 3 - Up
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 350 && mouse_y0 > 320){
-				buttonType = "lookUp";
-			}
-		}
-		//Button Look 4 - Down
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 420 && mouse_y0 > 385){
-				buttonType = "lookDown";
-			}
-		}
-		
-		//Button Move 1 - Left
-		if(mouse_x0 < 495 && mouse_x0 > 455){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "moveLeft";
-			}
-		}
-		//Button Move 2 - Right
-		if(mouse_x0 < 590 && mouse_x0 > 545){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
-				buttonType = "moveRight";
-			}
-		}
-
 	}
 
 	@Override
