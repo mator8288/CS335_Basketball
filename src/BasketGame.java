@@ -84,7 +84,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
 			
 			//gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
-	} catch (IOException e1) {
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (InterruptedException e1) {
@@ -231,7 +231,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawCourt(gl, 30f);
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
-
+		
 		gl.glPopMatrix();
 		gl.glPopMatrix();
 		
