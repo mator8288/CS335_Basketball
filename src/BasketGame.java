@@ -17,6 +17,7 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class BasketGame implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
@@ -107,7 +108,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		final GL2 gl = gLDrawable.getGL().getGL2();
 		
 		gl.glViewport( 0, 0, width, height );
-		gl.glMatrixMode( GLMatrixFunc.GL_PROJECTION );
+		gl.glMatrixMode( GL2.GL_PROJECTION );
 		gl.glLoadIdentity();
 		glu.gluPerspective( 60.0f, (float) windowWidth / windowHeight, 0.1f, skybox_size * (float) Math.sqrt( 3.0 ) / 2.0f );
 	}
@@ -118,7 +119,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
 		
-		gl.glMatrixMode( GLMatrixFunc.GL_MODELVIEW );
+		gl.glMatrixMode( GL2.GL_MODELVIEW );
 		gl.glPushMatrix();
 		
 		final float pan = 0.25f;
@@ -229,16 +230,39 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glTranslatef(0f, 0f, -0.5f);
 		drawCourt(gl, 30f);
 		drawGround( gl, 150.0f );
-		//gl.glTranslatef(-15.0f, 10.0f, 0.0f);
-		
-		//gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-		//gl.glEnable(GL2.GL_BLEND);
 		drawBox(gl, 30f);
-		//gl.glDisable(GL2.GL_BLEND);
+
 		gl.glPopMatrix();
 		gl.glPopMatrix();
+		
 		drawHud(gl);
 		
+		
+				
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glPushMatrix();
+		gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
+		gl.glLoadIdentity();
+		//gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
+				
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		
+		gl.glDisable(GL2.GL_DEPTH_TEST);
+		
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(0.0f, 0.0f);
+		gl.glVertex2f(50.0f, 0.0f);
+		gl.glVertex2f(50.0f, 50.0f);
+		gl.glVertex2f(0.0f, 50.0f);
+		gl.glEnd();
+		
+		gl.glEnable(GL2.GL_DEPTH_TEST);		
+		
+		gl.glPopMatrix();
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glPopMatrix();
 	}
 	
 	void drawHud(GL2 gl){
@@ -251,9 +275,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
         String v3 = Float.toString(zLook);
         
         hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
-        hudElements.draw("Player Position: " + v1, 120 , 85);
-        hudElements.draw("Player Horizontal Angle: " + v2, 120 , 70);
-        hudElements.draw("Player Vertical Angle: " + v3, 120 , 55);
+        hudElements.draw("Player Position: " + v1, 50 , 400);
+        hudElements.draw("Player Horizontal Angle: " + v2, 50 , 385);
+        hudElements.draw("Player Vertical Angle: " + v3, 50 , 370);
         hudElements.endRendering();
 	
 	}
