@@ -45,7 +45,6 @@ public class Ball {
 			}
 			
 		} else {
-			//ballPos = pos;
 			float changeX = look.getValue(X) - pos.getValue(X);
 			float changeY = look.getValue(Y) - pos.getValue(Y);
 			float dist = (float) Math.sqrt(changeX * changeX + changeY * changeY);
@@ -95,8 +94,8 @@ public class Ball {
 			//TODO: display info somehow
 			gl.glRotatef(angleSin, 0, 0, 1);
 			gl.glRotatef(180 + angleSin, 1, 0, 0);
-			gl.glColor3f(0.0f, 0.0f, 1.0f);
-			glut.glutSolidCone(0.25, strength / 10, 10, 30);
+			//gl.glColor3f(0.0f, 0.0f, 1.0f);
+			//glut.glutSolidCone(0.25, strength / 10, 10, 30);
 			
 		}
 		gl.glPopMatrix();

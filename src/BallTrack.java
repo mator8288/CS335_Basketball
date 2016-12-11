@@ -17,7 +17,8 @@ public class BallTrack{
 	Vector3f curPos, accel, speed;
 	private float diameter = 0.4f;
 	private Vector route = new Vector();
-	String info = "";
+	Vector info = new Vector();
+	String infostr = "";
 	
 	
 	public BallTrack(Vector3f curLoc, float strength, float angle, Vector3f cenLoc) {
@@ -25,16 +26,16 @@ public class BallTrack{
 		xChange = cenLoc.getValue(X) - curLoc.getValue(X);
 		yChange = cenLoc.getValue(Y) - curLoc.getValue(Y);
 		f = (float) Math.sqrt(xChange * xChange + yChange * yChange);
-		xStep = (step * xChange / f) * (float) Math.cos(angle * Math.PI / 180);
-		yStep = (step * yChange / f) * (float) Math.cos(angle * Math.PI / 180);
-		zStep = step / (float) Math.cos(angle * Math.PI / 180);
+		xStep = (step * xChange / f) * (float) Math.cos(angle);
+		yStep = - (step * yChange / f) * (float) Math.cos(angle);
+		zStep = step / (float) Math.cos(angle);
 		curPos = new Vector3f(curLoc);
-		accel = new Vector3f(0.0f, -0.002f, 0.0f);
+		accel = new Vector3f(0.0f, 0.0f, -0.002f);
 		speed = new Vector3f(xStep, yStep, zStep);
 		
 		while (route.size() < 350) {
 			route.add(new Vector3f(curPos));
-			info = "";
+			infostr = "";
 			speed.add(accel);
 			curPos.add(speed);
 			
@@ -49,7 +50,7 @@ public class BallTrack{
 				else 
 					curPos.setParameter(Z, -18.3f);
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
-				info = "Backboard hit!";
+				infostr = "Backboard hit!";
 			}
 			// pole collision
 			//else if () {}
@@ -57,6 +58,25 @@ public class BallTrack{
 			//else if () {}
 			// front wall collision
 			// floor collision
+			if (collidePoint == 0) {
+				// collides with rim
+			} else {
+				collidePoint--;
+			}
+			// score test
+			if (curPos.getValue(Z) < 7.2 && curPos.getValue(Z) > 6.8 &&
+					curPos.getValue(X) > -0.185 && curPos.getValue(X) < 0.185 &&
+					curPos.getValue(Y) > -17.685 && curPos.getValue(Y) < -17.415) {
+				infostr = "Score!";
+				scored = true;
+				if (scoredLoc < 0) {
+					scoredLoc = route.size();
+				}
+			}
+			if (infostr == "" && info.size() != 0) {
+				infostr = (String) info.get(info.size() - 1);
+				info.add(infostr);
+			}
 		}
 	}
 	
@@ -73,7 +93,7 @@ public class BallTrack{
 	}
 	
 	public String getInfo(int pos) {
-		return info;
+		return (String) info.get(pos);
 	}
 	
 	public void showPath(GL2 gl) {

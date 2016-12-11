@@ -44,7 +44,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	Vector3f look = new Vector3f(xLook, yLook, zLook);
 	Vector3f ballPos = new Vector3f(0.0f, -9.0f, 2.0f);
 	
-	Ball basketball = new Ball(new Vector3f(xPos + 1.0f, yPos, zPos));
+	Ball basketball = new Ball(new Vector3f(0.0f, -9.0f, 2.0f));
 	Ball lastBall = new Ball(pos);
 	boolean last_throw_score = false;
 	
@@ -212,7 +212,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yLook += 0.05f;
 			}
 			else{
-				yLook -= 0.05f;
+				//yLook -= 0.05f;
 			}
 			buttonType = "";
 		}
@@ -222,7 +222,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yLook -= 0.05f;
 			}
 			else{
-				yLook += 0.05f;
+				//yLook += 0.05f;
 			}
 			buttonType = "";
 		}
@@ -232,7 +232,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			if (yPos < 9.5)
 				yPos += 0.25;
 			else
-				yPos -=0.25;
+				//yPos -=0.25;
 			
 			buttonType = "";
 		}
@@ -241,7 +241,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			if (yPos > -9.5)
 				yPos -= 0.25;
 			else
-				yPos +=0.25;
+				//yPos +=0.25;
 			
 			buttonType = "";
 		}
@@ -249,8 +249,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		if(keys[KeyEvent.VK_SPACE] || buttonType == "strengthBar"){
 			if(shootBar) {
 				shootBar = false;
-				basketball.throwBall(ballPos, init_Velocity, 45f, pos);
-				phase = 1;
+				basketball.throwBall(ballPos, init_Velocity * 100, yLook, pos);
+				basketball.setPhase(2);
 			}
 			else
 				shootBar = true;
@@ -275,7 +275,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
 		
+		gl.glPushMatrix();
 		basketball.drawBall(ballPos, look, gl);
+		gl.glPopMatrix();
 		
 		//Backboard
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texID[3]);
@@ -310,7 +312,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	    gl.glTranslatef(0.0f, -19.0f, 0.0f);
 	    glut.glutSolidCylinder(0.1, 8, 10, 10);
 	    gl.glPopMatrix();
-	    //basketball.drawBall(ballPos, look, gl);
 		
 	    gl.glEnable(GL.GL_TEXTURE_2D);
 		//Start of 2D heads-up display
