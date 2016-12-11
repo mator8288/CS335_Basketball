@@ -1,19 +1,19 @@
-public class Vector {
+public class Vector3f {
 	private float x, y, z;
 	
-	public Vector() {
+	public Vector3f() {
 		x = 0;
 		y = 0;
 		z = 0;
 	}
 	
-	public Vector(Vector v) {
+	public Vector3f(Vector3f v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	} 
 	
-	public Vector(float X, float Y, float Z) {
+	public Vector3f(float X, float Y, float Z) {
 		x = X;
 		y = Y;
 		z = Z;
@@ -31,7 +31,7 @@ public class Vector {
 		}
 	}
 	
-	public void setVector(Vector v) {
+	public void setVector(Vector3f v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -57,13 +57,13 @@ public class Vector {
 		}
 	}
 	
-	public void add(Vector v) {
+	public void add(Vector3f v) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
 	}
 	
-	public void sub(Vector v) {
+	public void sub(Vector3f v) {
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
@@ -79,7 +79,7 @@ public class Vector {
 		}
 	}
 	
-	public float distance(Vector v) {
+	public float distance(Vector3f v) {
 		this.sub(v);
 		float dist = length();
 		this.add(v);
@@ -97,7 +97,7 @@ public class Vector {
 		z /= length;
 	}
 	
-	public void dot(Vector v) {
+	public void dot(Vector3f v) {
 		x *= v.x;
 		y *= v.y;
 		z *= v.z;

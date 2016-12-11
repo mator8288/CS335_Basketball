@@ -39,8 +39,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private float yLook = 0.0f;
 	private float zLook = 0.0f;
 	
-	Vector pos = new Vector(xPos, yPos, zPos);
-	Vector look = new Vector(xLook, yLook, zLook);
+	Vector3f pos = new Vector3f(xPos, yPos, zPos);
+	Vector3f look = new Vector3f(xLook, yLook, zLook);
 	
 	GLUT glut = new GLUT();
 	

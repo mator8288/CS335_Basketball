@@ -3,7 +3,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Ball {
 	GLUT glut = new GLUT();
-	private Vector ballPos;
+	private Vector3f ballPos;
 	private boolean thrown = false;
 	private int throw_int = 0;
 	private boolean scored = false;
@@ -19,7 +19,7 @@ public class Ball {
 	private final int Y = 1;
 	private final int Z = 2;
 	
-	public Ball(Vector pos, float lev) {
+	public Ball(Vector3f pos, float lev) {
 		ballPos = pos;
 		level = lev;
 	}
@@ -28,15 +28,15 @@ public class Ball {
 		thrown = false;
 	}
 	
-	public Vector getPos() {
+	public Vector3f getPos() {
 		return ballPos;
 	}
 	
-	public void setPos(Vector v) {
+	public void setPos(Vector3f v) {
 		ballPos = v;
 	}
 	
-	public void drawBall(Vector pos, Vector look, GL2 gl) {
+	public void drawBall(Vector3f pos, Vector3f look, GL2 gl) {
 		if (thrown) {
 			
 			if (throw_int <= 1) {
@@ -111,7 +111,7 @@ public class Ball {
 		gl.glEnable(GL.GL_CULL_FACE);
 	}
 	
-	public void throw(Vector center) {
+	public void throw(Vector3f center) {
 		ballPath = NULL;
 		ballPath = new BallTrack(ballPos, strength, angle, center, level);
 		thrown = true;
