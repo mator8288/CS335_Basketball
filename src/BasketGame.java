@@ -536,10 +536,10 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex3f( d, e, -0.5f );
 		
-		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glTexCoord2f( 0.5f, 0.0f );
 		gl.glVertex3f( -d, e, -0.5f );
 		
-		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glTexCoord2f( 0.5f, 1.0f );
 		gl.glVertex3f( -d, e, d );
 		
 		gl.glEnd();
@@ -554,10 +554,10 @@ if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 		gl.glTexCoord2f( 0.0f, 0.0f );
 		gl.glVertex3f( -d, -e, -0.5f );
 		
-		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glTexCoord2f( 0.5f, 0.0f );
 		gl.glVertex3f( d, -e, -0.5f );
 		
-		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glTexCoord2f( 0.5f, 1.0f );
 		gl.glVertex3f( d, -e, d );
 		
 		gl.glEnd();

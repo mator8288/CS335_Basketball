@@ -49,7 +49,12 @@ public class BallTrack{
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
 				info = "Backboard hit!";
 			}
-			else if ()
+			// pole collision
+			//else if () {}
+			// side wall collision
+			else if () {}
+			// front wall collision
+			// floor collision
 		}
 	}
 }
