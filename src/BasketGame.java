@@ -42,6 +42,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private int mouse_x0 = 0;
 	private int mouse_y0 = 0;
 	
+	private String buttonType = "";
+	
 	private int mouse_mode = 0;
 	
 	private final int MOUSE_MODE_NONE = 0;
@@ -84,7 +86,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			texture_loader.loadTexture(texID[2], "textures/outsidecourt.jpg");
 			
 			//gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
-	} catch (IOException e1) {
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (InterruptedException e1) {
@@ -163,56 +165,64 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				yPos += strafeVertical / normxy * pan;
 		}
 		
-		if (keys[KeyEvent.VK_UP]){
+		if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 			
 			if (zLook < 1.0f){
-				zLook += 0.01f;
+				zLook += 0.05f;
 			}
 			else{
-				zLook -= 0.01f;
+				zLook -= 0.05f;
 			}
+			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_DOWN]){
+		if (keys[KeyEvent.VK_DOWN] || buttonType == "lookDown"){
 			
 			if (zLook > -1.0f){
-				zLook -= 0.01f;
+				zLook -= 0.05f;
 			}
 			else{
-				zLook += 0.01f;
+				zLook += 0.05f;
 			}
+			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_LEFT]){
+		if (keys[KeyEvent.VK_LEFT] || buttonType == "lookLeft"){
 			
 			if (yLook < 1.0f){
-				yLook += 0.01f;
+				yLook += 0.05f;
 			}
 			else{
-				yLook -= 0.01f;
+				yLook -= 0.05f;
 			}
+			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_RIGHT]){
+		if (keys[KeyEvent.VK_RIGHT] || buttonType == "lookRight"){
 	
 			if (yLook > -1.0f){
-				yLook -= 0.01f;
+				yLook -= 0.05f;
 			}
 			else{
-				yLook += 0.01f;
+				yLook += 0.05f;
 			}
+			buttonType = "";
 		}
 		
-		if (keys[KeyEvent.VK_COMMA]){
+		if (keys[KeyEvent.VK_COMMA] || buttonType == "moveLeft"){
 			
 			if (yPos < 9.5)
-				yPos += 0.05;
+				yPos += 0.1;
 			else
-				yPos -=0.05;
+				yPos -=0.1;
+			
+			buttonType = "";
 		}
-		if (keys[KeyEvent.VK_PERIOD]){
+		if (keys[KeyEvent.VK_PERIOD] || buttonType == "moveRight"){
 			
 			if (yPos > -9.5)
-				yPos -= 0.05;
+				yPos -= 0.1;
 			else
-				yPos +=0.05;
+				yPos +=0.1;
+			
+			buttonType = "";
 		}
 		
 		glu.gluLookAt( xPos, yPos, zPos,
@@ -231,19 +241,16 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		drawCourt(gl, 30f);
 		drawGround( gl, 150.0f );
 		drawBox(gl, 30f);
-
+		
 		gl.glPopMatrix();
 		gl.glPopMatrix();
 		
 		drawHud(gl);
 		
-		
-				
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 		gl.glLoadIdentity();
-		//gl.glOrtho(0,windowWidth,windowHeight,0,-1,1);
 				
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glPushMatrix();
@@ -261,21 +268,22 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHudButtons(GL2 gl){
+		
 		//Angle Button 1
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(-0.75f, -0.6f);
-				gl.glVertex2f(-0.9f, -0.6f);
-				gl.glVertex2f(-0.9f, -0.75f);
-				gl.glVertex2f(-0.75f, -0.75f);
-				gl.glEnd();
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(-0.75f, -0.6f);
+		gl.glVertex2f(-0.9f, -0.6f);
+		gl.glVertex2f(-0.9f, -0.75f);
+		gl.glVertex2f(-0.75f, -0.75f);
+		gl.glEnd();
 				
-				//Angle Button 2
-				gl.glBegin(GL2.GL_QUADS);
-				gl.glVertex2f(-0.6f, -0.45f);
-				gl.glVertex2f(-0.75f, -0.45f);
-				gl.glVertex2f(-0.75f, -0.6f);
-				gl.glVertex2f(-0.6f, -0.6f);
-				gl.glEnd();
+		//Angle Button 2
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(-0.6f, -0.45f);
+		gl.glVertex2f(-0.75f, -0.45f);
+		gl.glVertex2f(-0.75f, -0.6f);
+		gl.glVertex2f(-0.6f, -0.6f);
+		gl.glEnd();
 
 				//Angle Button 3
 				gl.glBegin(GL2.GL_QUADS);
@@ -556,11 +564,53 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		mouse_x0 = e.getX();
 		mouse_y0 = e.getY();
 		
-		if ( MouseEvent.BUTTON1 == e.getButton() ) {
+		System.out.println("X Click: " + mouse_x0);
+		System.out.println("Y Click: " + mouse_y0);
+		
+		if ( MouseEvent.BUTTON2 == e.getButton() ) {
 			mouse_mode = MOUSE_MODE_ROTATE;
 		} else {
 			mouse_mode = MOUSE_MODE_NONE;
 		}
+		
+		//Button Look 1 - Left
+		if(mouse_x0 < 75 && mouse_x0 > 30){
+			if (mouse_y0 < 385 && mouse_y0 > 350){
+				buttonType = "lookLeft";
+			}
+		}
+		//Button Look 2 - Right
+		if(mouse_x0 < 170 && mouse_x0 > 125){
+			if (mouse_y0 < 385 && mouse_y0 > 350){
+				buttonType = "lookRight";
+			}
+		}
+		//Button Look 3 - Up
+		if(mouse_x0 < 125 && mouse_x0 > 75){
+			if (mouse_y0 < 350 && mouse_y0 > 320){
+				buttonType = "lookUp";
+			}
+		}
+		//Button Look 4 - Down
+		if(mouse_x0 < 125 && mouse_x0 > 75){
+			if (mouse_y0 < 420 && mouse_y0 > 385){
+				buttonType = "lookDown";
+			}
+		}
+		
+		//Button Move 1 - Left
+		if(mouse_x0 < 495 && mouse_x0 > 455){
+			if (mouse_y0 < 385 && mouse_y0 > 350){
+				buttonType = "moveLeft";
+			}
+		}
+		//Button Move 2 - Right
+		if(mouse_x0 < 590 && mouse_x0 > 545){
+			if (mouse_y0 < 385 && mouse_y0 > 350){
+				buttonType = "moveRight";
+			}
+		}
+
 	}
 
 	@Override
