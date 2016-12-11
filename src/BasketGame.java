@@ -19,6 +19,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.awt.TextRenderer;
+import java.text.DecimalFormat;
 
 public class BasketGame implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
 	private int windowWidth, windowHeight;
@@ -45,8 +46,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	int score = 0;
 	int nThrows = 0;
 	
-	Ball basketball = new Ball(ballPos);
-	Ball lastBall = new Ball(ballPos);
+	//Ball basketball = new Ball(ballPos);
+	//Ball lastBall = new Ball(ballPos);
 	boolean last_throw_score = false;
 	
 	GLUT glut = new GLUT();
@@ -59,6 +60,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private float init_Velocity = 0.0f;
 	private boolean progDirection = true;
 	private boolean shootBar = false;
+	private int shootPhase = 0;
 	
 	private int mouse_mode = 0;
 	
@@ -245,11 +247,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			buttonType = "";
 		}
 		
-		if(keys[KeyEvent.VK_SPACE]){
+		if(keys[KeyEvent.VK_SPACE] || buttonType == "strengthBar"){
 			if(shootBar)
 				shootBar = false;
 			else
 				shootBar = true;
+						
+			buttonType = "";
 		}
 		
 		glu.gluLookAt( xPos, yPos, zPos,
@@ -302,7 +306,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	    gl.glTranslatef(0.0f, -19.0f, 0.0f);
 	    glut.glutSolidCylinder(0.1, 8, 10, 10);
 	    gl.glPopMatrix();
-	    basketball.drawBall(ballPos, look, gl);
+	    //basketball.drawBall(ballPos, look, gl);
 		
 	    gl.glEnable(GL.GL_TEXTURE_2D);
 		//Start of 2D heads-up display
@@ -474,20 +478,22 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHud(GL2 gl){
-				
+		
 		TextRenderer hudElements = new TextRenderer(new Font("Helvatica",Font.BOLD,15)); 
         hudElements.beginRendering(windowWidth, windowHeight);
         
-        String v1 = Float.toString(yPos * -1);
-        String v2 = Float.toString(yLook * -1);
-        String v3 = Float.toString(zLook);
-        String v4 = Float.toString(init_Velocity);
+        DecimalFormat f = new DecimalFormat("0.00");
+        
+        String v1 = f.format(yPos * -1);
+        String v2 = f.format(yLook * -1);
+        String v3 = f.format(zLook);
+        String v4 = f.format((init_Velocity/0.56f) * 100.0f);
         
         hudElements.setColor(1.0f,1.0f,1.0f,0.8f);
         hudElements.draw("Player Position: " + v1, 15 , 400);
         hudElements.draw("Player Horizontal Angle: " + v2, 15 , 385);
         hudElements.draw("Player Vertical Angle: " + v3, 15 , 370);
-        hudElements.draw("Throw Strength: " + v4, 450, 400);
+        hudElements.draw("Throw Strength: " + v4 + "%", 450, 400);
         hudElements.endRendering();
 	
 	}
@@ -770,6 +776,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			if (mouse_y0 < 385 && mouse_y0 > 350){
 				buttonType = "moveRight";
 			}
+		}
+		
+		//Strength Bar
+		if(buttonType == ""){
+			buttonType = "strengthBar";
 		}
 
 	}
