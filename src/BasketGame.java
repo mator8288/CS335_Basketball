@@ -80,6 +80,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private final int MOUSE_MODE_NONE = 0;
 	private final int MOUSE_MODE_ROTATE = 1;
 	
+	private Ring hoop = new Ring(1.0f, 0.045f, 50);
+	
 	private boolean[] keys = new boolean[256];
 	GLUquadric quadric;
 	private GLU glu = new GLU();
@@ -354,7 +356,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glPushMatrix();
 		gl.glTranslatef(0.0f, -17.5f, 7.0f);
 		//gl.glRotatef(-5, 1, 0, 0);
-		glut.glutSolidTorus(0.045f, 1.0f, 15, 15);
+		//glut.glutSolidTorus(0.045f, 1.0f, 15, 15);
+		hoop.drawRing(gl);
 		gl.glPopMatrix();
 		
 
@@ -555,6 +558,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	        hudElements.draw("Player Horizontal Angle: " + v2, 15 , 385);
 	        hudElements.draw("Player Vertical Angle: " + v3, 15 , 370);
 	        hudElements.draw("Throw Strength: " + v4 + "%", 450, 400);
+	        hudElements.draw("Scores: ", 450, 385);
+	        hudElements.draw("Misses: ", 450, 370);
 	        hudElements.endRendering();
 		} else {
 			int speed = 1;

@@ -13,14 +13,14 @@ public class Ring {
 	
 	public Ring (float bigR, float smallR, int fa) {
 	    float uAngle = 0.0f, vAngle = 0.0f;
-	    float angleChange = (float) 360 / (float) faces;
+	    float angleChange = (float) 360 / (float) fa;
 	    this.faces = fa*fa;
 	
-	    vertexList = new Vector(faces * faces);
-	    normalList = new Vector(faces * faces);
-	    for (int i = 0; i < faces; i++) {
-	        for (int j = 0; j < faces; j++) {
-	            vertexList.set(j + i * faces, new Vector3f(
+	    vertexList = new Vector(fa * fa);
+	    normalList = new Vector(fa * fa);
+	    for (int i = 0; i < fa; i++) {
+	        for (int j = 0; j < fa; j++) {
+	            vertexList.add(j + i * fa, new Vector3f(
 	            		(bigR + smallR * (float) Math.cos(vAngle * (float) Math.PI / 180)) * (float) Math.cos(uAngle * (float) Math.PI / 180),
 	            		(float) (bigR + smallR * Math.cos(vAngle * Math.PI / 180)) * (float) Math.sin(uAngle * Math.PI / 180),
 	            		smallR * (float) Math.sin(vAngle * Math.PI / 180)));
@@ -31,19 +31,21 @@ public class Ring {
 	    }
 	
 	    faceLocation = new int[faces][];
-	    for (int i = 0; i < faces; i++) faceLocation[i] = new int[4];
-	
 	    for (int i = 0; i < faces; i++) {
-	        for (int j = 0; j < faces; j++) {
-	            faceLocation[j + i * faces][0] = (j + i * faces) % (faces);
-	            faceLocation[j + i * faces][1] = ((j + 1) % faces + i * faces) % (faces);
-	            faceLocation[j + i * faces][2] = ((j + 1) % faces + faces + i * faces) % (faces);
-	            faceLocation[j + i * faces][3] = (j + faces + i * faces) % (faces);
+	    	faceLocation[i] = new int[4];
+	    }
+	
+	    for (int i = 0; i < fa; i++) {
+	        for (int j = 0; j < fa; j++) {
+	            faceLocation[j + i * fa][0] = (j + i * fa) % (faces);
+	            faceLocation[j + i * fa][1] = ((j + 1) % fa + i * fa) % (faces);
+	            faceLocation[j + i * fa][2] = ((j + 1) % fa + fa + i * fa) % (faces);
+	            faceLocation[j + i * fa][3] = (j + fa + i * fa) % (faces);
 	        }
 	    }
 	
 	    //Normalize
-	    for (int i = 0; i < faces * faces; i++) {
+	    for (int i = 0; i < fa * fa; i++) {
 	        Vector3f vec1 = new Vector3f(((Vector3f) vertexList.get(faceLocation[i][0])).getValue(X) - ((Vector3f) vertexList.get(faceLocation[i][1])).getValue(X),
 	                      ((Vector3f) vertexList.get(faceLocation[i][0])).getValue(Y) - ((Vector3f) vertexList.get(faceLocation[i][1])).getValue(Y),
 	                      ((Vector3f) vertexList.get(faceLocation[i][0])).getValue(Z) - ((Vector3f) vertexList.get(faceLocation[i][1])).getValue(Z));
@@ -51,7 +53,7 @@ public class Ring {
 	        Vector3f vec2 = new Vector3f(((Vector3f) vertexList.get(faceLocation[i][0])).getValue(X) - ((Vector3f) vertexList.get(faceLocation[i][2])).getValue(X),
 	                      ((Vector3f) vertexList.get(faceLocation[i][0])).getValue(Y) - ((Vector3f) vertexList.get(faceLocation[i][2])).getValue(Y),
 	                      ((Vector3f) vertexList.get(faceLocation[i][0])).getValue(Z) - ((Vector3f) vertexList.get(faceLocation[i][2])).getValue(Z));
-	        normalList.set(i, new Vector3f(vec1.getValue(Y) * vec2.getValue(Z) - vec1.getValue(Z) * vec2.getValue(Y),
+	        normalList.add(i, new Vector3f(vec1.getValue(Y) * vec2.getValue(Z) - vec1.getValue(Z) * vec2.getValue(Y),
 	                                      vec1.getValue(Z) * vec2.getValue(X) - vec1.getValue(X) * vec2.getValue(Z),
 	                                      vec1.getValue(X) * vec2.getValue(Y) - vec1.getValue(Y) * vec2.getValue(X)));
 	        ((Vector3f) normalList.get(i)).normalize();

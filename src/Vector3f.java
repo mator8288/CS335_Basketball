@@ -103,9 +103,11 @@ public class Vector3f {
 		z /= length;
 	}
 	
-	public void dot(Vector3f v) {
-		x *= v.x;
-		y *= v.y;
-		z *= v.z;
+	public float dot(Vector3f v) {
+		float dotProd = 0.0f;
+		dotProd += x * v.x;
+		dotProd += y * v.y;
+		dotProd += z * v.z;
+		return dotProd;
 	}
 }
