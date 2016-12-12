@@ -112,9 +112,9 @@ public class Ball {
 		*/
 	}
 	
-	public void throwBall(Vector3f pos, float str, float ang, Vector3f cen) {
+	public void throwBall(Vector3f pos, float str, float ang, float zang, Vector3f cen) {
 		ballPath = null;
-		ballPath = new BallTrack(pos, str, ang, cen);
+		ballPath = new BallTrack(pos, str, ang, zang, cen);
 		thrown = true;
 		throw_int = ballPath.getSteps();
 		if (ballPath.scored()) {
@@ -178,5 +178,9 @@ public class Ball {
 	
 	public void showPath() {
 		show_trajectory = !show_trajectory;
+	}
+	
+	public BallTrack getPath() {
+		return ballPath;
 	}
 }

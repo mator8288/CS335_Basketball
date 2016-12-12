@@ -9,6 +9,7 @@ public class BallTrack{
 	final int Z = 2;
 	private boolean scored = false;
 	private int scoredLoc = -1;
+	private boolean stop_bounce;
 	private int collidePoint = 0;
 	float step;
 	float xChange, yChange;
@@ -21,14 +22,15 @@ public class BallTrack{
 	String infostr = "";
 	
 	
-	public BallTrack(Vector3f curLoc, float strength, float angle, Vector3f cenLoc) {
+	public BallTrack(Vector3f curLoc, float strength, float angle, float z_angle, Vector3f cenLoc) {
 		step = strength / 900;
+		stop_bounce = false;
 		xChange = cenLoc.getValue(X) - curLoc.getValue(X);
 		yChange = cenLoc.getValue(Y) - curLoc.getValue(Y);
 		f = (float) Math.sqrt(xChange * xChange + yChange * yChange);
-		xStep = (step * xChange / f) * (float) Math.cos(angle);
+		xStep = (step * xChange / f) * (float) Math.sin(angle);
 		yStep = - (step * yChange / f) * (float) Math.cos(angle);
-		zStep = step / (float) Math.cos(angle);
+		zStep = step / (float) Math.cos(z_angle);
 		curPos = new Vector3f(curLoc);
 		accel = new Vector3f(0.0f, 0.0f, -0.002f);
 		speed = new Vector3f(xStep, yStep, zStep);
@@ -46,18 +48,59 @@ public class BallTrack{
 					(curPos.getValue(Z) >= 6.3 && curPos.getValue(Z) <= 9.7)) {
 				speed.changeDirection(Y);
 				if (curPos.getValue(Y) > -18.3)
-					curPos.setParameter(Z, -18.7f);
+					curPos.setParameter(Y, -18.7f);
 				else 
-					curPos.setParameter(Z, -18.3f);
+					curPos.setParameter(Y, -18.3f);
+				
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
 				infostr = "Backboard hit!";
 			}
 			// pole collision
 			//else if () {}
 			// side wall collision
-			//else if () {}
+			
+			else if (curPos.getValue(X) < -9.8) {
+				infostr = "side wall collision";
+				curPos.setParameter(X, -9.75f);
+				speed.changeDirection(X);
+				speed.setParameter(X, 0.9f * speed.getValue(X));
+			}
+			else if (curPos.getValue(X) > 9.8) {
+				infostr = "side wall collision";
+				curPos.setParameter(X, 9.75f);
+				speed.changeDirection(X);
+				speed.setParameter(X, 0.9f * speed.getValue(X));
+			}
 			// front wall collision
+			else if (curPos.getValue(Y) < -19.8) {
+				infostr = "Front wall collision";
+				curPos.setParameter(Y, -19.75f);
+				speed.changeDirection(Y);
+				speed.setParameter(Y, 0.9f * speed.getValue(Y));
+			}
+			else if (curPos.getValue(Y) > 19.8) {
+				infostr = "Back wall collision";
+				curPos.setParameter(Y, 19.75f);
+				speed.changeDirection(Y);
+				speed.setParameter(Y,  0.9f * speed.getValue(Y));
+			}
 			// floor collision
+			else if (curPos.getValue(Z) < 0.2 && !stop_bounce) {
+				infostr = "floor collision";
+				curPos.setParameter(Z, 0.25f);
+				speed.changeDirection(Z);
+				speed.setParameter(Z, 0.8f * speed.getValue(Z));
+				
+				//if speed is too low, stop bouncing
+				if (speed.getValue(Z) <= 0.05f) {
+					stop_bounce = true;
+					speed.setParameter(Z, 0.0f);
+					accel.setParameter(Z, 0.0f);
+					curPos.setParameter(Z, 0.2f);
+				}
+			}
+			
+			
 			if (collidePoint == 0) {
 				// collides with rim
 			} else {
@@ -68,6 +111,7 @@ public class BallTrack{
 					curPos.getValue(X) > -0.185 && curPos.getValue(X) < 0.185 &&
 					curPos.getValue(Y) > -17.685 && curPos.getValue(Y) < -17.415) {
 				infostr = "Score!";
+				System.out.println("Score!");
 				scored = true;
 				if (scoredLoc < 0) {
 					scoredLoc = route.size();
@@ -94,6 +138,10 @@ public class BallTrack{
 	
 	public String getInfo(int pos) {
 		return (String) info.get(pos);
+	}
+	
+	public Vector getRoute() {
+		return route;
 	}
 	
 	public void showPath(GL2 gl) {

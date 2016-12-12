@@ -37,6 +37,12 @@ public class Vector3f {
 		z = v.z;
 	}
 	
+	public void setVector(float X, float Y, float Z) {
+		x = X;
+		y = Y;
+		z = Z;
+	}
+	
 	public void setParameter(int i, float val) {
 		if (i == 0) {
 			x = val;
