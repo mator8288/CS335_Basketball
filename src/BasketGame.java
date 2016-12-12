@@ -80,32 +80,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private final int MOUSE_MODE_NONE = 0;
 	private final int MOUSE_MODE_ROTATE = 1;
 	
-	Clip fence; 
-	Clip backboard; 
-	Clip success;
-	Clip failure; 
-	Clip bounce; 
-	sample = AudioSystem.getAudioInputStream(
-			new File("sounds/fence.wav"));
-	fence = AudioSystem.getClip();
-	fence.open(sample);
-	sample = AudioSystem.getAudioInputStream(
-			new File("sounds/backboard.wav"));
-	backboard = AudioSystem.getClip();
-	backboard.open(sample);
-	sample = AudioSystem.getAudioInputStream(
-			new File("sounds/swoosh.wav"));
-	success = AudioSystem.getClip();
-	success.open(sample);
-	sample = AudioSystem.getAudioInputStream(
-			new File("sounds/failure.wav"));
-	failure = AudioSystem.getClip();
-	failure.open(sample);
-	sample = AudioSystem.getAudioInputStream(
-			new File("sounds/dribble.wav"));
-	bounce = AudioSystem.getClip();
-	bounce.open(sample);
-
 	private boolean[] keys = new boolean[256];
 	GLUquadric quadric;
 	private GLU glu = new GLU();
