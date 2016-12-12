@@ -24,7 +24,7 @@ public class main extends JFrame {
 	static private Animator animator = null;
 	
 	public main() {
-		super( "Island Baskets" );
+		super( "Basket Island" );
 		
 		setDefaultCloseOperation( EXIT_ON_CLOSE );
 		setSize( 640, 480 );
