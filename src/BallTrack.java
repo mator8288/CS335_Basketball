@@ -29,10 +29,14 @@ public class BallTrack{
 	private Vector route = new Vector();
 	Vector info = new Vector();
 	String infostr = "";
+	private char soundTimes[];
+	int index;
 	
 	
 	public BallTrack(Vector3f curLoc, float strength, float angle, float z_angle, Vector3f cenLoc) {
 		step = strength / 900;
+		index = 0;
+		soundTimes = new char[500];
 		stop_bounce = false;
 		xChange = cenLoc.getValue(X) - curLoc.getValue(X);
 		yChange = cenLoc.getValue(Y) - curLoc.getValue(Y);
@@ -58,42 +62,47 @@ public class BallTrack{
 					(curPos.getValue(Z) >= 6.3 && curPos.getValue(Z) <= 9.7)) {
 				speed.changeDirection(Y);
 				if (curPos.getValue(Y) > -18.3)
-					curPos.setParameter(Y, -18.7f);
+					curPos.setParameter(Y, -18.71f);
 				else 
-					curPos.setParameter(Y, -18.3f);
+					curPos.setParameter(Y, -18.29f);
 				
 				speed.setParameter(Y, 0.7f * speed.getValue(Y));
 				infostr = "Backboard hit!";
+				soundTimes[index] = 'b';
 			}
 			// side wall collision
-			else if (curPos.getValue(X) < -9.5) {
+			if (curPos.getValue(X) < -9.5) {
 				infostr = "side wall collision";
-				curPos.setParameter(X, -9.75f);
+				curPos.setParameter(X, -9.45f);
 				speed.changeDirection(X);
 				speed.setParameter(X, 0.9f * speed.getValue(X));
+				soundTimes[index] = 'f';
 			}
-			else if (curPos.getValue(X) > 9.5) {
+			if (curPos.getValue(X) > 9.5) {
 				infostr = "side wall collision";
-				curPos.setParameter(X, 9.75f);
+				curPos.setParameter(X, 9.45f);
 				speed.changeDirection(X);
 				speed.setParameter(X, 0.9f * speed.getValue(X));
+				soundTimes[index] = 'f';
 			}
 			// front wall collision
-			else if (curPos.getValue(Y) < -19.5) {
+			if (curPos.getValue(Y) < -19.5) {
 				infostr = "Front wall collision";
-				curPos.setParameter(Y, -19.75f);
+				curPos.setParameter(Y, -19.45f);
 				speed.changeDirection(Y);
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
+				soundTimes[index] = 'f';
 			}
 			// back wall collision
-			else if (curPos.getValue(Y) > 19.5) {
+			if (curPos.getValue(Y) > 19.5) {
 				infostr = "Back wall collision";
-				curPos.setParameter(Y, 19.75f);
+				curPos.setParameter(Y, 19.45f);
 				speed.changeDirection(Y);
 				speed.setParameter(Y,  0.9f * speed.getValue(Y));
+				soundTimes[index] = 'f';
 			}
 			// floor collision
-			else if (curPos.getValue(Z) < 0.4 && !stop_bounce) {
+			if (curPos.getValue(Z) < 0.4 && !stop_bounce) {
 				infostr = "floor collision";
 				curPos.setParameter(Z, 0.4f);
 				speed.changeDirection(Z);
@@ -106,9 +115,10 @@ public class BallTrack{
 					accel.setParameter(Z, 0.0f);
 					curPos.setParameter(Z, 0.4f);
 				}
+				soundTimes[index] = 'd';
 			}
 			// pole collision
-			else if ((curPos.getValue(Y) <= -18.7 && curPos.getValue(Y) >= -19.3) &&
+			if ((curPos.getValue(Y) <= -18.7 && curPos.getValue(Y) >= -19.3) &&
 					curPos.getValue(X) <= 0.3 && curPos.getValue(X) >= -0.3 &&
 					curPos.getValue(Z) <= 8) {
 				infostr = "pole collision";
@@ -118,31 +128,35 @@ public class BallTrack{
 					curPos.setParameter(Y, -19.4f);
 				speed.changeDirection(Y);
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
+				soundTimes[index] = 'p';
 			}
 			//rim collision
-			else if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
+			if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
 						((curPos.getValue(X) >= 0.555 && curPos.getValue(X) <= 1.4) ||
 						(curPos.getValue(X) <= -0.555 && curPos.getValue(X) >= -1.4)) &&
 						(curPos.getValue(Y) <= -16.9 && curPos.getValue(Y) >= -18.0)) {
 				speed.changeDirection(X);
-				speed.setParameter(X, 0.6f * speed.getValue(X));
+				speed.setParameter(X, 0.8f * speed.getValue(X));
+				soundTimes[index] = 'r';
 			}
-			else if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
+			if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
 					((curPos.getValue(Y) >= -17.055 && curPos.getValue(Y) <= -16.655) ||
-					(curPos.getValue(Y) <= -17.945 && curPos.getValue(Y) >= -18.345)) &&
+					(curPos.getValue(Y) <= -17.945 && curPos.getValue(Y) >= -18.28)) &&
 					(curPos.getValue(X) >= -0.6 && curPos.getValue(X) <= 0.6)) {
 				speed.changeDirection(Y);
-				speed.setParameter(Y, 0.6f * speed.getValue(Y));
+				speed.setParameter(Y, 0.8f * speed.getValue(Y));
+				soundTimes[index] = 'r';
 			}
 			
 			// score test
 			if (curPos.getValue(Z) < 7.05f && curPos.getValue(Z) > 6.95f &&
 					curPos.getValue(X) >= -0.6 && curPos.getValue(X) <= 0.6 &&
-					curPos.getValue(Y) >= -18.1 && curPos.getValue(Y) <= -16.9 &&
+					curPos.getValue(Y) >= -18.345 && curPos.getValue(Y) <= -16.9 &&
 					!scored) {
 				infostr = "Score!";
 				System.out.println("Score!");
 				scored = true;
+				soundTimes[index] = 's';
 				if (scoredLoc < 0) {
 					scoredLoc = route.size();
 				}
@@ -151,6 +165,11 @@ public class BallTrack{
 				infostr = (String) info.get(info.size() - 1);
 				info.add(infostr);
 			}
+			
+			if (soundTimes[index] == '\u0000') {
+				soundTimes[index] = '0';
+			}
+			index++;
 		}
 	}
 	
@@ -186,5 +205,9 @@ public class BallTrack{
 			glut.glutWireSphere(0.02, 10, 10);
 			gl.glPopMatrix();
 		}
+	}
+	
+	public char[] getSoundTimes() {
+		return soundTimes;
 	}
 }

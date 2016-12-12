@@ -9,6 +9,7 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.*;
 import javax.sound.sampled.*;
@@ -61,6 +62,8 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	final int SHOOT = 2;
 	final int REPLAY = 3;
 	int phase = MOVEMENT;
+	
+	char soundTimes[] = new char[500];
 	
 	float speed = 1;
 	float step = 0.0f;
@@ -277,6 +280,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				if(shootBar) {
 					shootBar = false;
 					basketball.throwBall(ballPos, init_Velocity * 160, yLook, zLook, pos);
+					soundTimes = (basketball.getPath()).getSoundTimes();
 					phase = SHOOT;
 					route = basketball.getPath().getRoute();
 				}
@@ -319,6 +323,30 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			int step_up = (int) Math.ceil(step);
 			float factor = step - step_down;
 			float inv_factor = 1 - factor;
+			if (soundTimes[step_down] != '\u0000') {
+				if (soundTimes[step_down] == 'b' || soundTimes[step_down] == 'r')
+					playSound("sounds/backboard.wav");
+				else if (soundTimes[step_down] == 'd') 
+					playSound("sounds/dribble.wav");
+				else if (soundTimes[step_down] == 'f')
+					playSound("sounds/fence.wav");
+				else if (soundTimes[step_down] == 's')
+					playSound("sounds/swoosh.wav");
+				else if (soundTimes[step_down] == 'p')
+					playSound("sounds/pole.wav");
+			}
+			if (step_down >= 1 && soundTimes[step_down - 1] != '\u0000') {
+				if (soundTimes[step_down - 1] == 'b' || soundTimes[step_down - 1] == 'r')
+					playSound("sounds/backboard.wav");
+				else if (soundTimes[step_down - 1] == 'd') 
+					playSound("sounds/dribble.wav");
+				else if (soundTimes[step_down - 1] == 'f')
+					playSound("sounds/fence.wav");
+				else if (soundTimes[step_down - 1] == 's')
+					playSound("sounds/swoosh.wav");
+				else if (soundTimes[step_down - 1] == 'p')
+					playSound("sounds/pole.wav");
+			}
 			
 			if (step_up < route.size()) {
 				ballPos.setVector(inv_factor * ((Vector3f) route.get(step_down)).getValue(0) + factor * ((Vector3f) route.get(step_up)).getValue(0),
@@ -334,6 +362,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 					basketball.getPath().setScoredFalse();
 				} else {
 					misses++;
+					playSound("sounds/failure.wav");
 				}
 				phase = REPLAY;
 				xPos=5.0f;
@@ -570,6 +599,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				init_counter = 0.0f;
 				init_Velocity = 0.0f;
 				misses++;
+				playSound("sounds/failure.wav");
 			}
 			if (init_Velocity < 1.0f && progDirection){
 				init_Velocity += 0.02f;
@@ -958,5 +988,38 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 
 	@Override
 	public void mouseExited( MouseEvent e ) {
+	}
+	
+	private void playSound(String filename) 
+	{
+		try {
+		    File this_file = new File(filename);
+		    System.out.println(this_file.getParent());
+		    AudioInputStream stream;
+		    AudioFormat format;
+		    DataLine.Info info;
+		    Clip clip;
+
+		    stream = AudioSystem.getAudioInputStream(this_file);
+		    format = stream.getFormat();
+		    info = new DataLine.Info(Clip.class, format);
+		    clip = (Clip) AudioSystem.getLine(info);
+		    clip.open(stream);
+		    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		    if (filename == "sounds/backboard.wav" || filename == "sounds/failure.wav")
+		    	gainControl.setValue(-5.0f);
+		    else if (filename == "sounds/pole.wav")
+		    	gainControl.setValue(-8.0f);
+		    else if (filename == "sounds/dribble.wav")
+		    	gainControl.setValue(+2.0f);
+		    else if (filename == "sounds/swoosh.wav")
+		    	gainControl.setValue(+5.0f);
+		    else if (filename == "sounds/fence.wav")
+		    	gainControl.setValue(+4.0f);
+		    clip.start();
+		}
+		catch (Exception e) {
+		    System.out.println("Couldn't find sound file: " + filename);
+		}
 	}
 }
