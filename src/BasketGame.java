@@ -797,8 +797,10 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		mouse_x0 = e.getX();
 		mouse_y0 = e.getY();
 		
-		System.out.println("X Click: " + mouse_x0);
-		System.out.println("Y Click: " + mouse_y0);
+		double X = (double) mouse_x0 / windowWidth;
+		double Y = (double) mouse_y0 / windowHeight;
+		System.out.println("X Click: " + X);
+		System.out.println("Y Click: " + Y);
 		
 		if ( MouseEvent.BUTTON2 == e.getButton() ) {
 			mouse_mode = MOUSE_MODE_ROTATE;
@@ -807,39 +809,39 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		}
 		
 		//Button Look 1 - Left
-		if(mouse_x0 < 75 && mouse_x0 > 30){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
+		if(X < 0.1218 && X > 0.0496){
+			if (Y < 0.8730 && Y > 0.7982){
 				buttonType = "lookLeft";
 			}
 		}
 		//Button Look 2 - Right
-		if(mouse_x0 < 170 && mouse_x0 > 125){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
+		if(X < 0.2724 && X > 0.1987){
+			if (Y < 0.8730 && Y > 0.7982){
 				buttonType = "lookRight";
 			}
 		}
 		//Button Look 3 - Up
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 350 && mouse_y0 > 320){
+		if(X < 0.1987 && X > 0.1218){
+			if (Y < 0.7982 && Y > 0.7256){
 				buttonType = "lookUp";
 			}
 		}
 		//Button Look 4 - Down
-		if(mouse_x0 < 125 && mouse_x0 > 75){
-			if (mouse_y0 < 420 && mouse_y0 > 385){
+		if(X < 0.1987 && X > 0.1218){
+			if (Y < 0.9478 && Y > 0.8730){
 				buttonType = "lookDown";
 			}
 		}
 		
 		//Button Move 1 - Left
-		if(mouse_x0 < 495 && mouse_x0 > 455){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
+		if(X < 0.7965 && X > 0.7243){
+			if (Y < 0.8730 && Y > 0.7982){
 				buttonType = "moveLeft";
 			}
 		}
 		//Button Move 2 - Right
-		if(mouse_x0 < 590 && mouse_x0 > 545){
-			if (mouse_y0 < 385 && mouse_y0 > 350){
+		if(X < 0.9471 && X > 0.8733){
+			if (Y < 0.8730 && Y > 0.7982){
 				buttonType = "moveRight";
 			}
 		}
@@ -848,7 +850,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		if(buttonType == ""){
 			buttonType = "strengthBar";
 		}
-
 	}
 
 	@Override
