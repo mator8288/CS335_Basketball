@@ -11,7 +11,7 @@ public class Ball {
 	private float strength;
 	private boolean angleChange = false;
 	private boolean strengthChange = false;
-	private boolean show_trajectory = true;
+	private boolean show_trajectory = false;
 	private BallTrack ballPath = null;
 	private int phase = 0;
 	private final int X = 0;

@@ -25,6 +25,7 @@ public class BallTrack{
 	float xStep, yStep, zStep;
 	Vector3f curPos, accel, speed;
 	private float diameter = 0.4f;
+	private Ring tempRing = new Ring(1.0f, 0.045f, 50);
 	private Vector route = new Vector();
 	Vector info = new Vector();
 	String infostr = "";
@@ -42,6 +43,7 @@ public class BallTrack{
 		curPos = new Vector3f(curLoc);
 		accel = new Vector3f(0.0f, 0.0f, -0.002f);
 		speed = new Vector3f(xStep, yStep, zStep);
+		scored = false;
 		
 		while (route.size() < 350) {
 			route.add(new Vector3f(curPos));
@@ -60,44 +62,40 @@ public class BallTrack{
 				else 
 					curPos.setParameter(Y, -18.3f);
 				
-				speed.setParameter(Y, 0.9f * speed.getValue(Y));
+				speed.setParameter(Y, 0.7f * speed.getValue(Y));
 				infostr = "Backboard hit!";
 			}
-			// pole collision
-			else if (curPos.getValue(Y) < -18.8 && curPos.getValue(Y) > -19.2 &&
-					curPos.getValue(X) > -0.2 && curPos.getValue(X) < 0.2 && 
-					curPos.getValue(Z) > ) {}
 			// side wall collision
-			
-			else if (curPos.getValue(X) < -9.8) {
+			else if (curPos.getValue(X) < -9.5) {
 				infostr = "side wall collision";
 				curPos.setParameter(X, -9.75f);
 				speed.changeDirection(X);
 				speed.setParameter(X, 0.9f * speed.getValue(X));
 			}
-			else if (curPos.getValue(X) > 9.8) {
+			else if (curPos.getValue(X) > 9.5) {
 				infostr = "side wall collision";
 				curPos.setParameter(X, 9.75f);
 				speed.changeDirection(X);
 				speed.setParameter(X, 0.9f * speed.getValue(X));
 			}
 			// front wall collision
-			else if (curPos.getValue(Y) < -19.8) {
+			else if (curPos.getValue(Y) < -19.5) {
 				infostr = "Front wall collision";
 				curPos.setParameter(Y, -19.75f);
 				speed.changeDirection(Y);
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
 			}
-			else if (curPos.getValue(Y) > 19.8) {
+			// back wall collision
+			else if (curPos.getValue(Y) > 19.5) {
 				infostr = "Back wall collision";
 				curPos.setParameter(Y, 19.75f);
 				speed.changeDirection(Y);
 				speed.setParameter(Y,  0.9f * speed.getValue(Y));
 			}
 			// floor collision
-			else if (curPos.getValue(Z) < 0.2 && !stop_bounce) {
+			else if (curPos.getValue(Z) < 0.4 && !stop_bounce) {
 				infostr = "floor collision";
-				curPos.setParameter(Z, 0.25f);
+				curPos.setParameter(Z, 0.41f);
 				speed.changeDirection(Z);
 				speed.setParameter(Z, 0.8f * speed.getValue(Z));
 				
@@ -106,20 +104,42 @@ public class BallTrack{
 					stop_bounce = true;
 					speed.setParameter(Z, 0.0f);
 					accel.setParameter(Z, 0.0f);
-					curPos.setParameter(Z, 0.2f);
+					curPos.setParameter(Z, 0.4f);
 				}
 			}
-			
-			
-			if (collidePoint == 0) {
-				// collides with rim
-			} else {
-				collidePoint--;
+			// pole collision
+			else if ((curPos.getValue(Y) <= -18.7 && curPos.getValue(Y) >= -19.3) &&
+					curPos.getValue(X) <= 0.4 && curPos.getValue(X) >= -0.4 &&
+					curPos.getValue(Z) <= 8) {
+				infostr = "pole collision";
+				if (curPos.getValue(Y) <= -18.7)
+					curPos.setParameter(Y, -18.6f);
+				else if (curPos.getValue(Y) >= -19.3)
+					curPos.setParameter(Y, -19.4f);
+				speed.changeDirection(Y);
+				speed.setParameter(Y, 0.9f * speed.getValue(Y));
 			}
+			//rim collision
+			else if (curPos.getValue(Z) <= 7.35 && curPos.getValue(Z) >= 6.35 &&
+						((curPos.getValue(X) >= 0.575 && curPos.getValue(X) <= 0.62) ||
+						(curPos.getValue(X) <= -0.575 && curPos.getValue(X) >= -0.62)) &&
+						(curPos.getValue(Y) <= -17.0 && curPos.getValue(Y) >= -18.0)) {
+				speed.changeDirection(X);
+				speed.setParameter(X, 0.6f * speed.getValue(X));
+			}
+			else if (curPos.getValue(Z) <= 7.35 && curPos.getValue(Z) >= 6.35 &&
+					((curPos.getValue(Y) >= -16.945 && curPos.getValue(Y) <= -16.9) ||
+					(curPos.getValue(Y) <= -18.055 && curPos.getValue(Y) >= -18.1)) &&
+					(curPos.getValue(X) >= -0.5 && curPos.getValue(X) <= 0.5)) {
+				speed.changeDirection(Y);
+				speed.setParameter(Y, 0.6f * speed.getValue(Y));
+			}
+			
 			// score test
-			if (curPos.getValue(Z) < 7.2 && curPos.getValue(Z) > 6.8 &&
-					curPos.getValue(X) > -0.185 && curPos.getValue(X) < 0.185 &&
-					curPos.getValue(Y) > -17.685 && curPos.getValue(Y) < -17.415) {
+			if (curPos.getValue(Z) < 7.05f && curPos.getValue(Z) > 6.95f &&
+					curPos.getValue(X) >= -0.775 && curPos.getValue(X) <= 0.775 &&
+					curPos.getValue(Y) >= -18.255 && curPos.getValue(Y) <= -16.745 &&
+					!scored) {
 				infostr = "Score!";
 				System.out.println("Score!");
 				scored = true;
@@ -144,6 +164,10 @@ public class BallTrack{
 	
 	public boolean scored() {
 		return scored;
+	}
+	
+	public void setScoredFalse() {
+		scored = false;
 	}
 	
 	public String getInfo(int pos) {

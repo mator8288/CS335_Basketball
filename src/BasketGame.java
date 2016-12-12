@@ -50,6 +50,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	Ball basketball = new Ball(new Vector3f(0.0f, -9.0f, 2.0f));
 	Ball lastBall = new Ball(pos);
 	boolean last_throw_score = false;
+	int scores = 0;
+	int misses = 0;
+	float init_counter;
 	
 	Vector route;
 	
@@ -59,9 +62,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	final int REPLAY = 3;
 	int phase = MOVEMENT;
 	
-	int speed = 1;
+	float speed = 1;
 	float step = 0.0f;
-	float step_inc = 2;
+	float step_inc = 2.0f;
 	
 	GLUT glut = new GLUT();
 	
@@ -163,7 +166,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		final float pan = 0.25f;
 		
 		// Update the camera state.
-		if (phase == MOVEMENT) {
+		if (phase == REPLAY) {
 			if ( keys[KeyEvent.VK_W] || keys[KeyEvent.VK_S] ) {
 				float normxy = (float) Math.sqrt( xLook * xLook + yLook * yLook );
 				float multiplier = keys[KeyEvent.VK_W] ? 1.0f : -0.5f;
@@ -172,9 +175,11 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			}
 			
 			if ( keys[KeyEvent.VK_R] ) {
-				zPos += pan;
+				if (zPos < 10.0f)
+					zPos += pan;
 			} else if ( keys[KeyEvent.VK_F] ) {
-				zPos -= pan;
+				if (zPos > 1.0f)
+					zPos -= pan;
 			}
 			
 			if ( keys[KeyEvent.VK_A] || keys[KeyEvent.VK_D] ) {
@@ -192,8 +197,13 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				float normxy = (float) Math.sqrt( strafeHorizontal * strafeHorizontal + strafeVertical * strafeVertical );
 				
 				System.out.println(Math.abs(yPos));
+				if (xPos > 19.5)
+					xPos = 19.5f;
+				else if (xPos < -19.5)
+					xPos = -19.5f;
+				else
+					xPos += strafeHorizontal / normxy * pan;
 				
-				xPos += strafeHorizontal / normxy * pan;
 				if (yPos > 9.5)
 					yPos = 9.5f;
 				else if (yPos < -9.5)
@@ -201,7 +211,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				else
 					yPos += strafeVertical / normxy * pan;
 			}
-			
+		}
 			if (keys[KeyEvent.VK_UP] || buttonType == "lookUp"){
 				
 				if (zLook < 1.0f){
@@ -242,7 +252,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				}
 				buttonType = "";
 			}
-			
+		if (phase == MOVEMENT) {
 			if (keys[KeyEvent.VK_COMMA] || buttonType == "moveLeft"){
 				
 				if (yPos < 9.5)
@@ -273,6 +283,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				else {
 					shootBar = true;
 					init_Velocity = 0.01f;
+					init_counter = 0.01f;
 					phase = STRENGTH;
 				}
 				
@@ -307,32 +318,60 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			int step_down = (int) Math.floor(step);
 			int step_up = (int) Math.ceil(step);
 			float factor = step - step_down;
+			float inv_factor = 1 - factor;
 			
 			if (step_up < route.size()) {
-				ballPos.setVector(((Vector3f) route.get(step_down)).getValue(0) + factor * ((Vector3f) route.get(step_up)).getValue(0),
-					((Vector3f) route.get(step_down)).getValue(1) + factor * ((Vector3f) route.get(step_up)).getValue(1),
-					((Vector3f) route.get(step_down)).getValue(2) + factor * ((Vector3f) route.get(step_up)).getValue(2));
+				ballPos.setVector(inv_factor * ((Vector3f) route.get(step_down)).getValue(0) + factor * ((Vector3f) route.get(step_up)).getValue(0),
+					inv_factor * ((Vector3f) route.get(step_down)).getValue(1) + factor * ((Vector3f) route.get(step_up)).getValue(1),
+					inv_factor * ((Vector3f) route.get(step_down)).getValue(2) + factor * ((Vector3f) route.get(step_up)).getValue(2));
 			}
 			else {
 				ballPos.setVector(((Vector3f) route.get(route.size() - 1)).getValue(0),
 						((Vector3f) route.get(route.size() - 1)).getValue(1),
 						((Vector3f) route.get(route.size() - 1)).getValue(2));
+				if (basketball.getPath().scored()) {
+					scores++;
+					basketball.getPath().setScoredFalse();
+				} else {
+					misses++;
+				}
 				phase = REPLAY;
+				xPos=5.0f;
+				yPos=10.0f;
+				zPos=4.0f;
+				yLook= (float) -Math.PI / 2;
+				step = 0;
+				step_inc = 0.5f;
 			}
 		}
 		
 		if (phase == REPLAY) {
-			step = 0;
+			step += step_inc;
+			int step_down = (int) Math.floor(step);
+			int step_up = (int) Math.ceil(step);
+			float factor = step - step_down;
+			float inv_factor = 1 - factor;
 			
-			
-			xPos = 8.0f;
-			yPos = 0.0f;
-			zPos = 2.0f;
-			xLook = 1.0f;
-			yLook = 0.0f;
-			zLook = 0.0f;
-			phase = MOVEMENT;
-			ballPos.setVector(0.0f, -9.0f, 2.0f);
+			if (step_up < route.size()) {
+				ballPos.setVector(inv_factor * ((Vector3f) route.get(step_down)).getValue(0) + factor * ((Vector3f) route.get(step_up)).getValue(0),
+					inv_factor * ((Vector3f) route.get(step_down)).getValue(1) + factor * ((Vector3f) route.get(step_up)).getValue(1),
+					inv_factor * ((Vector3f) route.get(step_down)).getValue(2) + factor * ((Vector3f) route.get(step_up)).getValue(2));
+			}
+			else {
+				ballPos.setVector(((Vector3f) route.get(route.size() - 1)).getValue(0),
+						((Vector3f) route.get(route.size() - 1)).getValue(1),
+						((Vector3f) route.get(route.size() - 1)).getValue(2));
+				xPos = 8.0f;
+				yPos = 0.0f;
+				zPos = 2.0f;
+				xLook = 1.0f;
+				yLook = 0.0f;
+				zLook = 0.0f;
+				step = 0;
+				step_inc = 2.0f;
+				phase = MOVEMENT;
+				ballPos.setVector(0.0f, -9.0f, 2.0f);
+			}
 		}
 		
 		basketball.drawBall(ballPos, look, gl);
@@ -362,14 +401,14 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 
 		//Pole
-		gl.glColor3f(0.5f, 0.5f, 0.5f);
+		gl.glColor3f(0.4f, 0.4f, 0.4f);
 	    gl.glPushMatrix();
 	    //gl.glBindTexture(GL.GL_TEXTURE_2D, texID[4]);
 	    //gl.glColor3f(0.5f, 0.5f, 0.5f);
 	    //gl.glRotatef(90, 0, 1, 0);  
 	    //gl.glRotatef(90, 1, 0, 0);
 	    gl.glTranslatef(0.0f, -19.0f, 0.0f);
-	    glut.glutSolidCylinder(0.1, 8, 10, 10);
+	    glut.glutSolidCylinder(0.2, 8, 10, 10);
 	    gl.glPopMatrix();
 		
 	    gl.glEnable(GL.GL_TEXTURE_2D);
@@ -402,6 +441,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	}
 	
 	void drawHudButtons(GL2 gl){
+		if (phase != REPLAY) {
 		gl.glBindTexture( GL2.GL_TEXTURE_2D, texID[5] );
 		
 		//Angle Button 1 - Left
@@ -494,36 +534,46 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		gl.glVertex2f(0.45f, -0.75f);
 		gl.glEnd();
 		
-		//Draw Progress Bar
-		gl.glBindTexture( GL2.GL_TEXTURE_2D, 0 );
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(0.3f, -0.6f);
-		gl.glVertex2f(-0.3f, -0.6f);
-		gl.glVertex2f(-0.3f, -0.75f);
-		gl.glVertex2f(0.3f, -0.75f);
-		gl.glEnd();
-		
-		gl.glColor3f(0.0f, 1.0f, 0.0f);
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(0.15f, -0.6f);
-		gl.glVertex2f(0.1f, -0.6f);
-		gl.glVertex2f(0.1f, -0.75f);
-		gl.glVertex2f(0.15f, -0.75f);
-		gl.glEnd();
-		
-		gl.glTranslatef(0.55f * init_Velocity, 0.0f, 0.0f);
-		gl.glColor3f(0.0f, 0.0f, 1.0f);
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2f(-0.25f, -0.65f);
-		gl.glVertex2f(-0.3f, -0.65f);
-		gl.glVertex2f(-0.3f, -0.7f);
-		gl.glVertex2f(-0.25f, -0.7f);
-		gl.glEnd();
-		
+			//Draw Progress Bar
+			if (phase == STRENGTH || phase == SHOOT) {
+				gl.glBindTexture( GL2.GL_TEXTURE_2D, 0 );
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(0.3f, -0.6f);
+				gl.glVertex2f(-0.3f, -0.6f);
+				gl.glVertex2f(-0.3f, -0.75f);
+				gl.glVertex2f(0.3f, -0.75f);
+				gl.glEnd();
+				
+				gl.glColor3f(0.0f, 1.0f, 0.0f);
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(0.15f, -0.6f);
+				gl.glVertex2f(0.1f, -0.6f);
+				gl.glVertex2f(0.1f, -0.75f);
+				gl.glVertex2f(0.15f, -0.75f);
+				gl.glEnd();
+				
+				gl.glTranslatef(0.55f * init_Velocity, 0.0f, 0.0f);
+				gl.glColor3f(0.0f, 0.0f, 1.0f);
+				gl.glBegin(GL2.GL_QUADS);
+				gl.glVertex2f(-0.25f, -0.65f);
+				gl.glVertex2f(-0.3f, -0.65f);
+				gl.glVertex2f(-0.3f, -0.7f);
+				gl.glVertex2f(-0.25f, -0.7f);
+				gl.glEnd();
+			}
+		}
 		if (shootBar)
 		{
+			if (init_counter >= 4.0f) {
+				shootBar = false;
+				phase = MOVEMENT;
+				init_counter = 0.0f;
+				init_Velocity = 0.0f;
+				misses++;
+			}
 			if (init_Velocity < 1.0f && progDirection){
 				init_Velocity += 0.02f;
+				init_counter += 0.02f;
 			}
 			else
 			{
@@ -532,6 +582,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 			
 			if (init_Velocity > 0.01 && !progDirection){
 				init_Velocity -= 0.02;
+				init_counter += 0.02f;
 			}
 			else
 			{
@@ -558,12 +609,33 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	        hudElements.draw("Player Horizontal Angle: " + v2, 15 , 385);
 	        hudElements.draw("Player Vertical Angle: " + v3, 15 , 370);
 	        hudElements.draw("Throw Strength: " + v4 + "%", 450, 400);
-	        hudElements.draw("Scores: ", 450, 385);
-	        hudElements.draw("Misses: ", 450, 370);
+	        hudElements.draw("Scores: " + scores, 450, 385);
+	        hudElements.draw("Misses: " + misses, 450, 370);
 	        hudElements.endRendering();
 		} else {
-			int speed = 1;
-			
+			String speed = "1x";
+			if (step_inc == 2.0f) {
+				speed = "1x";
+			}
+			else if (step_inc == 1.0f) {
+				speed = "1/2x";
+			}
+			else if (step_inc == 0.5f) {
+				speed = "1/4x";
+			}
+			else {
+				speed = "1/10x";
+			}
+			TextRenderer hudElements = new TextRenderer(new Font("Helvatica",Font.BOLD,15)); 
+	        hudElements.beginRendering(windowWidth, windowHeight);
+	        
+	        hudElements.setColor(1.0f, 1.0f, 1.0f, 0.8f);
+	        hudElements.draw("Replay Mode", 250, 400);
+	        
+	        hudElements.draw("Speed: " + speed, 250, 385);
+	        
+	        hudElements.endRendering();
+	        
 		}
 	}
 	
@@ -741,6 +813,9 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	@Override
 	public void keyPressed( KeyEvent e ) {
 		keys[ e.getKeyCode() ] = true;
+		if (e.getKeyCode() == 'z') {
+			basketball.showPath();
+		}
 	}
 
 	@Override
@@ -801,6 +876,21 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	public void mousePressed( MouseEvent e ) {
 		mouse_x0 = e.getX();
 		mouse_y0 = e.getY();
+		
+		if (phase == REPLAY) {
+			if (step_inc == 2.0f) {
+				step_inc = 1.0f;
+			}
+			else if (step_inc == 1.0f) {
+				step_inc = 0.5f;
+			}
+			else if (step_inc == 0.5f) {
+				step_inc = 0.2f;
+			} 
+			else {
+				step_inc = 2.0f;
+			}
+		}
 		
 		double X = (double) mouse_x0 / windowWidth;
 		double Y = (double) mouse_y0 / windowHeight;
