@@ -43,7 +43,6 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	private float yLook = 0.0f;
 	private float zLook = 0.0f;
 	
-	
 	Vector3f pos = new Vector3f(xPos, yPos, zPos);
 	Vector3f look = new Vector3f(xLook, yLook, zLook);
 	Vector3f ballPos = new Vector3f(0.0f, -9.0f, 2.0f);
@@ -80,6 +79,32 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 	
 	private final int MOUSE_MODE_NONE = 0;
 	private final int MOUSE_MODE_ROTATE = 1;
+	
+	Clip fence; 
+	Clip backboard; 
+	Clip success;
+	Clip failure; 
+	Clip bounce; 
+	sample = AudioSystem.getAudioInputStream(
+			new File("sounds/fence.wav"));
+	fence = AudioSystem.getClip();
+	fence.open(sample);
+	sample = AudioSystem.getAudioInputStream(
+			new File("sounds/backboard.wav"));
+	backboard = AudioSystem.getClip();
+	backboard.open(sample);
+	sample = AudioSystem.getAudioInputStream(
+			new File("sounds/swoosh.wav"));
+	success = AudioSystem.getClip();
+	success.open(sample);
+	sample = AudioSystem.getAudioInputStream(
+			new File("sounds/failure.wav"));
+	failure = AudioSystem.getClip();
+	failure.open(sample);
+	sample = AudioSystem.getAudioInputStream(
+			new File("sounds/dribble.wav"));
+	bounce = AudioSystem.getClip();
+	bounce.open(sample);
 
 	private boolean[] keys = new boolean[256];
 	GLUquadric quadric;

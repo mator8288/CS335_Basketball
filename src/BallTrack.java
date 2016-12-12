@@ -1,6 +1,13 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.util.gl2.GLUT;
+
+import java.io.File;
 import java.util.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class BallTrack{
 	GLUT glut = new GLUT();
@@ -11,6 +18,7 @@ public class BallTrack{
 	private int scoredLoc = -1;
 	private boolean stop_bounce;
 	private int collidePoint = 0;
+	Vector collidePoints = new Vector();
 	float step;
 	float xChange, yChange;
 	float f;
@@ -20,6 +28,13 @@ public class BallTrack{
 	private Vector route = new Vector();
 	Vector info = new Vector();
 	String infostr = "";
+	
+	AudioInputStream fence = AudioSystem.getAudioInputStream(
+			new File("sounds/fence.wav"));
+	AudioInputStream backboard = AudioSystem.getAudioInputStream(
+			new File("sounds/backboard.wav"));
+	Clip fenceAudio = AudioSystem.getClip();
+	fence.open(fenceAudio);
 	
 	
 	public BallTrack(Vector3f curLoc, float strength, float angle, float z_angle, Vector3f cenLoc) {
