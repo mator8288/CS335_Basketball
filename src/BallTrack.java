@@ -64,7 +64,9 @@ public class BallTrack{
 				infostr = "Backboard hit!";
 			}
 			// pole collision
-			//else if () {}
+			else if (curPos.getValue(Y) < -18.8 && curPos.getValue(Y) > -19.2 &&
+					curPos.getValue(X) > -0.2 && curPos.getValue(X) < 0.2 && 
+					curPos.getValue(Z) > ) {}
 			// side wall collision
 			
 			else if (curPos.getValue(X) < -9.8) {
