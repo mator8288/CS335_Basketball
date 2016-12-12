@@ -891,59 +891,60 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 				step_inc = 2.0f;
 			}
 		}
-		
-		double X = (double) mouse_x0 / windowWidth;
-		double Y = (double) mouse_y0 / windowHeight;
-		System.out.println("X Click: " + X);
-		System.out.println("Y Click: " + Y);
-		
-		if ( MouseEvent.BUTTON2 == e.getButton() ) {
-			mouse_mode = MOUSE_MODE_ROTATE;
-		} else {
-			mouse_mode = MOUSE_MODE_NONE;
-		}
-		
-		//Button Look 1 - Left
-		if(X < 0.1218 && X > 0.0496){
-			if (Y < 0.8730 && Y > 0.7982){
-				buttonType = "lookLeft";
+		else {
+			double X = (double) mouse_x0 / windowWidth;
+			double Y = (double) mouse_y0 / windowHeight;
+			System.out.println("X Click: " + X);
+			System.out.println("Y Click: " + Y);
+			
+			if ( MouseEvent.BUTTON2 == e.getButton() ) {
+				mouse_mode = MOUSE_MODE_ROTATE;
+			} else {
+				mouse_mode = MOUSE_MODE_NONE;
 			}
-		}
-		//Button Look 2 - Right
-		if(X < 0.2724 && X > 0.1987){
-			if (Y < 0.8730 && Y > 0.7982){
-				buttonType = "lookRight";
+			
+			//Button Look 1 - Left
+			if(X < 0.1218 && X > 0.0496){
+				if (Y < 0.8730 && Y > 0.7982){
+					buttonType = "lookLeft";
+				}
 			}
-		}
-		//Button Look 3 - Up
-		if(X < 0.1987 && X > 0.1218){
-			if (Y < 0.7982 && Y > 0.7256){
-				buttonType = "lookUp";
+			//Button Look 2 - Right
+			if(X < 0.2724 && X > 0.1987){
+				if (Y < 0.8730 && Y > 0.7982){
+					buttonType = "lookRight";
+				}
 			}
-		}
-		//Button Look 4 - Down
-		if(X < 0.1987 && X > 0.1218){
-			if (Y < 0.9478 && Y > 0.8730){
-				buttonType = "lookDown";
+			//Button Look 3 - Up
+			if(X < 0.1987 && X > 0.1218){
+				if (Y < 0.7982 && Y > 0.7256){
+					buttonType = "lookUp";
+				}
 			}
-		}
-		
-		//Button Move 1 - Left
-		if(X < 0.7965 && X > 0.7243){
-			if (Y < 0.8730 && Y > 0.7982){
-				buttonType = "moveLeft";
+			//Button Look 4 - Down
+			if(X < 0.1987 && X > 0.1218){
+				if (Y < 0.9478 && Y > 0.8730){
+					buttonType = "lookDown";
+				}
 			}
-		}
-		//Button Move 2 - Right
-		if(X < 0.9471 && X > 0.8733){
-			if (Y < 0.8730 && Y > 0.7982){
-				buttonType = "moveRight";
+			
+			//Button Move 1 - Left
+			if(X < 0.7965 && X > 0.7243){
+				if (Y < 0.8730 && Y > 0.7982){
+					buttonType = "moveLeft";
+				}
 			}
-		}
-		
-		//Strength Bar
-		if(buttonType == ""){
-			buttonType = "strengthBar";
+			//Button Move 2 - Right
+			if(X < 0.9471 && X > 0.8733){
+				if (Y < 0.8730 && Y > 0.7982){
+					buttonType = "moveRight";
+				}
+			}
+			
+			//Strength Bar
+			if(buttonType == ""){
+				buttonType = "strengthBar";
+			}
 		}
 	}
 

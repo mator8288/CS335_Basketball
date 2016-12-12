@@ -95,7 +95,7 @@ public class BallTrack{
 			// floor collision
 			else if (curPos.getValue(Z) < 0.4 && !stop_bounce) {
 				infostr = "floor collision";
-				curPos.setParameter(Z, 0.41f);
+				curPos.setParameter(Z, 0.4f);
 				speed.changeDirection(Z);
 				speed.setParameter(Z, 0.8f * speed.getValue(Z));
 				
@@ -109,7 +109,7 @@ public class BallTrack{
 			}
 			// pole collision
 			else if ((curPos.getValue(Y) <= -18.7 && curPos.getValue(Y) >= -19.3) &&
-					curPos.getValue(X) <= 0.4 && curPos.getValue(X) >= -0.4 &&
+					curPos.getValue(X) <= 0.3 && curPos.getValue(X) >= -0.3 &&
 					curPos.getValue(Z) <= 8) {
 				infostr = "pole collision";
 				if (curPos.getValue(Y) <= -18.7)
@@ -120,25 +120,25 @@ public class BallTrack{
 				speed.setParameter(Y, 0.9f * speed.getValue(Y));
 			}
 			//rim collision
-			else if (curPos.getValue(Z) <= 7.35 && curPos.getValue(Z) >= 6.35 &&
-						((curPos.getValue(X) >= 0.575 && curPos.getValue(X) <= 0.62) ||
-						(curPos.getValue(X) <= -0.575 && curPos.getValue(X) >= -0.62)) &&
-						(curPos.getValue(Y) <= -17.0 && curPos.getValue(Y) >= -18.0)) {
+			else if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
+						((curPos.getValue(X) >= 0.555 && curPos.getValue(X) <= 1.4) ||
+						(curPos.getValue(X) <= -0.555 && curPos.getValue(X) >= -1.4)) &&
+						(curPos.getValue(Y) <= -16.9 && curPos.getValue(Y) >= -18.0)) {
 				speed.changeDirection(X);
 				speed.setParameter(X, 0.6f * speed.getValue(X));
 			}
-			else if (curPos.getValue(Z) <= 7.35 && curPos.getValue(Z) >= 6.35 &&
-					((curPos.getValue(Y) >= -16.945 && curPos.getValue(Y) <= -16.9) ||
-					(curPos.getValue(Y) <= -18.055 && curPos.getValue(Y) >= -18.1)) &&
-					(curPos.getValue(X) >= -0.5 && curPos.getValue(X) <= 0.5)) {
+			else if (curPos.getValue(Z) <= 7.25 && curPos.getValue(Z) >= 6.75 &&
+					((curPos.getValue(Y) >= -17.055 && curPos.getValue(Y) <= -16.655) ||
+					(curPos.getValue(Y) <= -17.945 && curPos.getValue(Y) >= -18.345)) &&
+					(curPos.getValue(X) >= -0.6 && curPos.getValue(X) <= 0.6)) {
 				speed.changeDirection(Y);
 				speed.setParameter(Y, 0.6f * speed.getValue(Y));
 			}
 			
 			// score test
 			if (curPos.getValue(Z) < 7.05f && curPos.getValue(Z) > 6.95f &&
-					curPos.getValue(X) >= -0.775 && curPos.getValue(X) <= 0.775 &&
-					curPos.getValue(Y) >= -18.255 && curPos.getValue(Y) <= -16.745 &&
+					curPos.getValue(X) >= -0.6 && curPos.getValue(X) <= 0.6 &&
+					curPos.getValue(Y) >= -18.1 && curPos.getValue(Y) <= -16.9 &&
 					!scored) {
 				infostr = "Score!";
 				System.out.println("Score!");
