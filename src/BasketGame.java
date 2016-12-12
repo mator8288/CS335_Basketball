@@ -391,7 +391,7 @@ public class BasketGame implements GLEventListener, KeyListener, MouseListener, 
 		
 		drawHudButtons(gl);
 		
-		gl.glEnable(GL2.GL_DEPTH_TEST);		
+		gl.glEnable(GL2.GL_DEPTH_TEST);
 		
 		gl.glPopMatrix();
 		gl.glMatrixMode(GL2.GL_PROJECTION);

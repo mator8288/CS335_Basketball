@@ -29,13 +29,6 @@ public class BallTrack{
 	Vector info = new Vector();
 	String infostr = "";
 	
-	AudioInputStream fence = AudioSystem.getAudioInputStream(
-			new File("sounds/fence.wav"));
-	AudioInputStream backboard = AudioSystem.getAudioInputStream(
-			new File("sounds/backboard.wav"));
-	Clip fenceAudio = AudioSystem.getClip();
-	fence.open(fenceAudio);
-	
 	
 	public BallTrack(Vector3f curLoc, float strength, float angle, float z_angle, Vector3f cenLoc) {
 		step = strength / 900;
